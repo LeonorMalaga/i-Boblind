@@ -1,0 +1,70 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="work_mode_list"
+        android:title="@string/pref_work_mode"
+        android:defaultValue="1"
+        android:entries="@array/pref_work_mode_list_titles"
+        android:entryValues="@array/pref_work_mode_list_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+   <!-- <ListPreference
+        android:key="work_save_list"
+        android:title="@string/pref_save_mode"
+        android:defaultValue="1"
+        android:entries="@array/pref_work_save_list_titles"
+        android:entryValues="@array/pref_work_save_list_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />-->
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <EditTextPreference
+        android:key="server"
+        android:title="@string/pref_server"
+        android:defaultValue="@string/default_import_editText"
+        android:selectAllOnFocus="true"
+        android:inputType="textCapWords"
+        android:capitalize="words"
+        android:singleLine="true"
+        android:maxLines="1" />
+    <EditTextPreference
+        android:key="measuresFORaverage"
+        android:title="@string/measuresFORaverage"
+        android:defaultValue="@string/pref_default_measuresFORaverage"
+        android:selectAllOnFocus="true"
+        android:inputType="textCapWords"
+        android:capitalize="words"
+        android:singleLine="true"
+        android:maxLines="1" />
+
+    <EditTextPreference
+        android:key="diferAverage"
+        android:title="@string/diferAverage"
+        android:defaultValue="@string/pref_default_diferAverage"
+        android:selectAllOnFocus="true"
+        android:inputType="textCapWords"
+        android:capitalize="words"
+        android:singleLine="true"
+        android:maxLines="1" />
+
+    <EditTextPreference
+        android:key="movement"
+        android:title="@string/movement"
+        android:defaultValue="@string/pref_default_movement"
+        android:selectAllOnFocus="true"
+        android:inputType="textCapWords"
+        android:capitalize="words"
+        android:singleLine="true"
+        android:maxLines="1" />
+
+    <EditTextPreference
+        android:key="time"
+        android:title="@string/time"
+        android:defaultValue="@string/pref_default_time"
+        android:selectAllOnFocus="true"
+        android:inputType="textCapWords"
+        android:capitalize="words"
+        android:singleLine="true"
+        android:maxLines="1" />
+
+</PreferenceScreen>

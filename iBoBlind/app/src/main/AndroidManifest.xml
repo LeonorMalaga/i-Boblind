@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="mesas.martinez.leonor.iBoBlind">
+    <uses-sdk android:minSdkVersion="18"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="mesas.martinez.leonor.iBoBlind.Activitys.NewProject_Activity"
+            android:label="@string/app_name"></activity>
+
+        <activity
+            android:name="mesas.martinez.leonor.iBoBlind.Activitys.User_Activity"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="mesas.martinez.leonor.iBoBlind.Activitys.Installer_Activity"
+            android:label="@string/app_name"></activity>
+        <activity
+            android:name="mesas.martinez.leonor.iBoBlind.Activitys.FirstActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="mesas.martinez.leonor.iBoBlind.Activitys.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+
+        <service
+            android:name="mesas.martinez.leonor.iBoBlind.comunication.GETPOSTIntentService"
+            android:exported="false"></service>
+
+        <service
+            android:name="mesas.martinez.leonor.iBoBlind.Services.SpeechBluService"
+            android:exported="false">
+        </service>
+    </application>
+
+</manifest>
