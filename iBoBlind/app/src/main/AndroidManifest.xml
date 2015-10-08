@@ -20,17 +20,19 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="mesas.martinez.leonor.iBoBlind.Activitys.NewProject_Activity"
+            android:name=".Activitys.NewProject_Activity"
             android:label="@string/app_name"></activity>
 
         <activity
-            android:name="mesas.martinez.leonor.iBoBlind.Activitys.User_Activity"
-            android:label="@string/app_name"></activity>
+            android:name=".Activitys.User_Activity"
+            android:label="@string/app_name"
+            android:configChanges="screenSize|orientation"></activity>
         <activity
-            android:name="mesas.martinez.leonor.iBoBlind.Activitys.Installer_Activity"
-            android:label="@string/app_name"></activity>
+            android:name=".Activitys.Installer_Activity"
+            android:label="@string/app_name"
+            android:configChanges="screenSize|orientation"></activity>
         <activity
-            android:name="mesas.martinez.leonor.iBoBlind.Activitys.FirstActivity"
+            android:name=".Activitys.FirstActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,15 +40,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="mesas.martinez.leonor.iBoBlind.Activitys.SettingsActivity"
+            android:name=".Activitys.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
 
         <service
-            android:name="mesas.martinez.leonor.iBoBlind.comunication.GETPOSTIntentService"
+            android:name=".comunication.GETPOSTIntentService"
             android:exported="false"></service>
 
         <service
-            android:name="mesas.martinez.leonor.iBoBlind.Services.SpeechBluService"
+            android:name=".Services.SpeechBluService"
             android:exported="false">
         </service>
     </application>

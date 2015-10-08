@@ -48,7 +48,7 @@ public class FirstActivity extends ActionBarActivity {
             if (first == 168451239) {
                 //Itś not the first time, look the work mode and jump to the correct activity
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                workMode = sharedPrefs.getString(Constants.WORKMODE, "1");
+                workMode = sharedPrefs.getString(Constants.WORKMODE, "0");
                 Log.d("-NOT FIRST-: ", workMode);
                 if (workMode.equals("0")) {
 
@@ -59,7 +59,7 @@ public class FirstActivity extends ActionBarActivity {
 
             } else {
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                workMode = sharedPrefs.getString(Constants.WORKMODE, "1");
+                workMode = sharedPrefs.getString(Constants.WORKMODE, "0");
                 Log.d("--FIRST-WOORK MODE-: ", workMode);
                 DatabaseInstaler = new MySQLiteHelper(getApplicationContext());
                 PreferenceManager.getDefaultSharedPreferences(FirstActivity.this)

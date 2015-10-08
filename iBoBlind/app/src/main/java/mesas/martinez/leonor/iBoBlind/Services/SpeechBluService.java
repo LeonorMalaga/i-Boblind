@@ -1,22 +1,34 @@
 package mesas.martinez.leonor.iBoBlind.Services;
 
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Handler;
 
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.RecognizerIntent;
 
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -24,6 +36,8 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,6 +62,7 @@ private OrionJsonManager jsonManager;
 //--to-speak-Variables/Contans,enums---//
 private String toSpeak;
 private TextToSpeech tts=null;
+private boolean ttsInit;
  //-------------for accelerometer----------//
  private Accelerometer accelerometer;
  private int min_timesensitivity = 100000000;
@@ -68,9 +83,8 @@ public static enum State {
     DISCONNECTING
 }
 
-    private static final long SCAN_TIMEOUT = 2000;
-    private static final long WAIT_PERIOD = 5000;
-
+    private static final long SCAN_TIMEOUT = 800;
+    private static final long WAIT_PERIOD = 3000;
 
     private String address;
     private String device_name;
@@ -78,9 +92,17 @@ public static enum State {
     private String old_address;
     private String old_string_rssi;
     private BluetoothAdapter mBluetoothAdapter= null;
+    //--for target 21
+
+    private BluetoothLeScanner mLEScanner;
+    private ScanSettings settings;
+    private List<ScanFilter> filter;
+    private mScanCallback myScanCallback;
+    //--fin terget21--//
     private State mState;
     private Handler mHandler;
     private HTTP_JSON_POST jsonPost;
+    private List<ScanFilter> filters;
 
    //-----DataBase-Variables--//
    private DeviceDAO deviceDAO;
@@ -91,6 +113,7 @@ public static enum State {
        // this.setState(State.UNKNOWN);
         mHandler = new Handler();
         mState=State.CONNECTING;
+        ttsInit=false;
         start = true;
         tts=null;
     }
@@ -98,57 +121,108 @@ public static enum State {
     //-----------------------------------------------Main-Method---------------------------//
     @Override
     protected void onHandleIntent(Intent intent) {
-        //to can reproduce the messages
         toSpeak = " ";
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-            tts=null;
-        }
-            Log.i("Create TexToSpeech", "new tts");
-            tts = new TextToSpeech(getBaseContext(),this);
-            tts.setSpeechRate(0.5f);
+           if (tts != null) {
+          tts.stop();
+          tts.shutdown();
+          tts=null;
+       }
+        //Comprobar si estan activos los elementos necesarios
+
+        tts = new TextToSpeech(getBaseContext(),this);
+        //tts = new TextToSpeech(this,this);
+        tts.setSpeechRate(0.5f);
+        tts.setPitch(1.5f);
+        //to can reproduce the messages
 
         mDevicesArray= new ArrayList<Deviceaux>();
         sharePreference = PreferenceManager.getDefaultSharedPreferences(this);
-        tts = new TextToSpeech(this, this);
-        accelerometer = new Accelerometer();
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(Constants.DEVICE));
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(Constants.DEVICE_MESSAGE));
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(Constants.SERVICE_STOP));
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(Constants.SERVICE_UNKNOWN_STATE));
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(Constants.SERVICE_WAIT_RESPONSE));
+
         measuresFORaverage=sharePreference.getInt(Constants.MEASURES,3);
         diferAverage=sharePreference.getInt(Constants.DIFER,2);
         min_movement=sharePreference.getInt(Constants.MOVEMENT,11);
         min_movement=(float)min_movement/10;
         time_sensitivity=sharePreference.getInt(Constants.MOVEMENT,20);
         time_sensitivity=time_sensitivity*min_timesensitivity;
-        Log.d(Constants.TAG,"------------SETTINGS----------: /\n--int_movement----"+min_movement+"---diferAverage---"+diferAverage+"----measuresDORaverage---"+measuresFORaverage+"--------time sensitivity-------"+time_sensitivity);
+
+        accelerometer = new Accelerometer();
         accelerometer.setTime_sensitivity(time_sensitivity);
         accelerometer.setMin_movement(min_movement);
-        try {
-        this.startScan();
-        } catch (InterruptedException e) {
-            Log.d("InterrupteException in While", "------------STOP----------");
-            //start = false;
+
+        Log.d(Constants.TAG,"------------AFTERONinit----------: /\n--int_movement----"+min_movement+"---diferAverage---"+diferAverage+"----measuresDORaverage---"+measuresFORaverage+"--------time sensitivity-------"+time_sensitivity);
+
+        accelerometer.start();
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            myScanCallback=new mScanCallback();
         }
 
- //Start detect i-beacons
+        try {
+            this.startScan();
+        } catch (InterruptedException e) {
+            Log.d("InterrupteException in While", "------------STOP----------");
+            start = false;
+        }
+
+        //Start detect i-beacons
         while (start) {
             try {
                 synchronized (this) {
-                    Log.d("---onHandleIntent WHILE---", "Start Scan");
+                    //Log.d("---onHandleIntent WHILE---", "Start Scan");
                     this.startScan();
                     this.wait(WAIT_PERIOD);}
             } catch (InterruptedException e) {
                 Log.d("InterruptedException in While", "------------STOP----------");
                 start = false;
             }
-       }
-        
+        }
     }
-    //---------------------------------------Methods and subclass--------------------------------//
+    //----------------------------------------------------Methods---------------------------------//
+    //------------------to-Speak--Methods---------------------------//
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+            Locale locSpainh= new Locale("spa","ESP");
+            int result = tts.setLanguage(locSpainh);
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(this, "This Language is not supported", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Ready to Speak", Toast.LENGTH_SHORT).show();
+                ttsInit=true;
+            }
+        } else {
+            Toast.makeText(this, "Can Not Speak", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+        @SuppressWarnings("deprecation")
+    private void ttsUnder20(String text){
+        HashMap<String,String> map = new HashMap<>();
+        map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,"MessageId");
+        tts.speak(text,TextToSpeech.QUEUE_ADD,map);
+    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void ttsUnder21(String text){
+        String utteranceId=this.hashCode()+"";
+        tts.speak(text,TextToSpeech.QUEUE_ADD,null,utteranceId);
+    }
+
+    protected void speakTheText( ) {
+        Log.v("--SPEAKtheTEXT---", toSpeak);
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            ttsUnder21(toSpeak);
+        }else{
+            ttsUnder20(toSpeak);
+        }
+    }
+
+//-------------------------------------END SPEAK METODS----------------------------------------------//
   public void setState(State state){
       mState = state;
       //Log.d("--Service--Set State--",mState.name());
@@ -172,10 +246,9 @@ public static enum State {
             if (tts != null) {
                 tts.stop();
                 tts.shutdown();
-                tts=null;
             }
-            //Stop accelerometer
-
+           //Stop accelerometer
+           accelerometer.stop();
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
             this.stopSelf();//Stop service
             this.onDestroy();
@@ -200,7 +273,8 @@ public static enum State {
                     Log.i("OnL--INTENT DEVICE received-------------",maddress+", mesage: "+toSpeak+", rssi "+String.valueOf(mrssi)+", coberageAlert"+String.valueOf(mrssi));
 
                     if(!toSpeak.equals(null)){
-                        SpeechBluService.this.speakTheText( );
+                       SpeechBluService.this.speakTheText( );
+                        //speakTheText(toSpeak);
                         Deviceaux mdeviceaux=new Deviceaux(maddress,mcoberageAlert,toSpeak,mrssi);
                         int index = mDevicesArray.indexOf(mdeviceaux);
                         Log.d("OnL--INTEN DEVICE--","------ index: "+ String.valueOf(index));
@@ -220,6 +294,7 @@ public static enum State {
                     Log.i("-----------INTENT received-------------","---DEVICE_MESSAGE--"+toSpeak);
                     if(!toSpeak.equals(null))
                         SpeechBluService.this.speakTheText( );
+                        //speakTheText(toSpeak);
                     break;
                 case Constants.SERVICE_STOP:
                     SpeechBluService.this.mstop();
@@ -240,28 +315,6 @@ public static enum State {
         }
     };
     
-    //------------------to-Speak--Methods---------------------------//
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            int result = tts.setLanguage(Locale.ENGLISH);
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Toast.makeText(this, "This Language is not supported", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Ready to Speak", Toast.LENGTH_LONG).show();
-            }
-
-        } else {
-            Toast.makeText(this, "Can Not Speak", Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-    protected void speakTheText( ) {
-        //Log.v("--SPEAKtheTEXT---", textToSpeak);
-        //if(!textToSpeak.equals(" ") && tts!=null){
-        tts.speak(SpeechBluService.this.toSpeak, TextToSpeech.QUEUE_FLUSH, null);//}
-    }
 
     @Override
     public void onDestroy() {
@@ -272,33 +325,51 @@ public static enum State {
 
     //------------------------BLU--Methods---------------------------//
 
-
+    @SuppressWarnings("deprecation")
+    private void stopLeScan(){
+        mBluetoothAdapter.stopLeScan(SpeechBluService.this);
+    }
+    @SuppressWarnings("deprecation")
+    private void startLeScan(){
+        mBluetoothAdapter.startLeScan(SpeechBluService.this);
+    }
     private void start() {
            // Log.d("startScan:", "------------------Star-----------------------\n\n\n ");
 // scan for SCAN_TIMEOUT
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    Log.d("Start ","--------------stopLeScan-------------");
                     //SpeechBluService.this.setState(State.WAIT);
-                    mBluetoothAdapter.stopLeScan(SpeechBluService.this);
+                    if(Build.VERSION.SDK_INT<21){
+                        stopLeScan();
+                    }else{
+                        mLEScanner.stopScan(myScanCallback);
+                    }
                 }
             }, SCAN_TIMEOUT);
         //Wait for HTTP_JSON_POST end, before scan again
-        if((!mState.equals(State.SCANNING)) && (!mState.equals(State.WAIT_RESPONSE)) ){
+       // if((!mState.equals(State.SCANNING)) && (!mState.equals(State.WAIT_RESPONSE)) ){
 //                        Log.i("---onHandleIntent WHILE--", "WAIT FOR STATE CHANGE");
             SpeechBluService.this.setState(State.SCANNING);
-            mBluetoothAdapter.startLeScan(SpeechBluService.this);
+            Log.d("Start ","--------------startLeScan-------------");
+        if(Build.VERSION.SDK_INT<21){
+            startLeScan();
+        }else{
+            mLEScanner.startScan(filters,settings,myScanCallback);
         }
 
+        //}
      }
-
 
     private void startScan() throws InterruptedException {
         if (mBluetoothAdapter== null) {
+            Log.d("Start Scan","mBluetoothAdapter==null");
             final BluetoothManager BluetoothManager = (android.bluetooth.BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             mBluetoothAdapter = BluetoothManager.getAdapter();
         }
         if (mBluetoothAdapter== null || !mBluetoothAdapter.isEnabled()) {
+            Log.d("Start Scan","mBluetoothAdapter is not Enable");
             Log.i("starScan","BLUETOOH is OFF");
             this.setState(State.BLUETOOTH_OFF);
             String turn_on=getResources().getString(R.string.turn_on_Bluetooth);
@@ -309,27 +380,36 @@ public static enum State {
             LocalBroadcastManager.getInstance(this).sendBroadcastSync(intent);
             start=false;
         } else {
+            if(Build.VERSION.SDK_INT>=21){
+                mLEScanner=mBluetoothAdapter.getBluetoothLeScanner();
+                settings=new ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_BALANCED).build();
+                filters=new ArrayList<ScanFilter>();
+            }
             //Log.i("starScan","-----------------------------------!!!!!---mDeviceArray-----Clear--!!!!--------------------------------");
            // mDevicesArray.clear();
             SpeechBluService.this.start();
         }
     }
-
-//Method from LeScanCallBack
-    @Override
-    public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-
+    //--------------------------------------------------------------------When a i-becaon is detected---------------------------------------//
+    public void OnDeviceDetected(final BluetoothDevice device, int rssi){
         address = device.getAddress().toString();
-        string_rssi = String.valueOf(rssi);
+         string_rssi = String.valueOf(rssi);
         device_name=device.getName();
+        Deviceaux auxdevice=new Deviceaux(rssi,address);
+        int index=mDevicesArray.indexOf(auxdevice);
+        Log.d("OnLeScan","----New Device--- address: "+ address+ " rssi "+string_rssi);
         jsonManager=new OrionJsonManager() ;
         //String jsonString=jsonManager.SetJSONtoGetMessage("BLE", address);
         String jsonString=jsonManager.SetJSONtoGetAttributes("BLE", address,getApplicationContext());
         if(device_name!=null){
-        jsonManager.setDeviceName(device_name);}
-        Deviceaux auxdevice=new Deviceaux(rssi,address);
-        int index=mDevicesArray.indexOf(auxdevice);
-        Log.d("OnLeScan","----Device detected--- index: "+ String.valueOf(index));
+            jsonManager.setDeviceName(device_name);}
+
+        // Log.d("OnLeScan","----Device detected--- index: "+ String.valueOf(index));
+
+        //toSpeak="prueva";
+        //Toast.makeText(this, toSpeak, Toast.LENGTH_LONG).show();
+        //SpeechBluService.this.speakTheText();
+
        if(index<0){
            // The first time the user is in the region we say the  RegionEnter message ; and it save state.
                 Log.d("OnLeScan","----New Device--- address: "+ address+ " rssi "+string_rssi);
@@ -340,8 +420,42 @@ public static enum State {
                speakUpdateDeviceauxAgain(index,rssi);
 
            }
-
     }
+
+//Method from LeScanCallBack
+    @Override
+    public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+      OnDeviceDetected(device, rssi);
+    }
+    //---------------------For api 21---------------------//
+    @TargetApi(21)
+    private class mScanCallback extends ScanCallback{
+            public mScanCallback(){
+                super();
+            }
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+          BluetoothDevice btDevice=result.getDevice();
+          int rssi=result.getRssi();
+          OnDeviceDetected(btDevice, rssi);
+        }
+
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+            for(ScanResult sr: results){
+                Log.i("ScanResult-Results",sr.toString());
+            }
+
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+            Log.e("Scan Failed", "Error Code:"+errorCode);
+
+        }
+    };
+    //-----------------FIn api 21------------------//
+    //---------------------------------------------------------------Fin-----When a i-becaon is detected---------------------------------------//
     //---------------Device again--------------------//
     private void speakUpdateDeviceauxAgain(int index,int rssi){
         Deviceaux auxdevice=mDevicesArray.get(index);
@@ -425,6 +539,8 @@ public static enum State {
         private float min_movement=11;
         private long time_difference=2;
         private long current_time;
+        private SensorManager sm;
+        private List<Sensor> sensors;
 
         public int getTime_sensitivity() {
             return time_sensitivity;
@@ -452,29 +568,34 @@ public static enum State {
 
         @Override
         protected Object clone() throws CloneNotSupportedException {
-            SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+            sm = (SensorManager) getSystemService(SENSOR_SERVICE);
             sm.unregisterListener(this);
             return super.clone();
         }
 
         Accelerometer() {
-            SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-            List<Sensor> sensors = sm.getSensorList(Sensor.TYPE_ACCELEROMETER);
+            sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+            sensors = sm.getSensorList(Sensor.TYPE_ACCELEROMETER);
+
+        }
+        public void start(){
             if (sensors.size() > 0) {
                 sm.registerListener(this, sensors.get(0), SensorManager.SENSOR_DELAY_UI);
             }
         }
-
         public boolean RangeOfTime() {
             boolean response = false;
             //*5.0 because discober devices is slow that accelerometer
             if (time_difference < (time_sensitivity)) {
                 response = true;
             }
-            Log.d(Constants.TAG, "-----RANGE OF TIMER------" + response + "--" + time_difference + " < " + (time_sensitivity));
+            //Log.d(Constants.TAG, "-----RANGE OF TIMER------" + response + "--" + time_difference + " < " + (time_sensitivity));
             return response;
         }
 
+        public void stop(){
+            sm.unregisterListener(this, sensors.get(0));
+        }
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
@@ -496,13 +617,13 @@ public static enum State {
                 }
                 time_difference = current_time - last_movement;
 
-//           Log.v(Constants.TAG, " --Time--"+current_time+"---------DIFFER TIME----------"+time_difference);
+           //Log.v(Constants.TAG, " --Time--"+current_time+"---------DIFFER TIME----------"+time_difference);
                 if (time_difference > time_sensitivity) {
                     movement = (Math.abs(curX - prevX) + Math.abs(curY - prevY) + Math.abs(curZ - prevZ));
                     // Log.v(Constants.TAG, "\n\n-----Movement0------"+movement+" > "+min_movement+" --Time--"+current_time+"---------DIFFER TIME----------"+time_difference);
                     if (movement > min_movement) {
                         last_movement = current_time;
-                        Log.v(Constants.TAG, "\n\n-----Movement1------" + movement + " > " + min_movement + " --Time--" + current_time + "---------DIFFER TIME----------" + time_difference);
+                       // Log.v(Constants.TAG, "\n\n-----Movement1------" + movement + " > " + min_movement + " --Time--" + current_time + "---------DIFFER TIME----------" + time_difference);
                         prevX = curX;
                         prevY = curY;
                         prevZ = curZ;
@@ -510,9 +631,6 @@ public static enum State {
                 }
             }
         }
-
     }
-
     //---------------------Fin Accelerometer-------------------//
-
 }

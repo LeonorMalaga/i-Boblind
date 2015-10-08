@@ -118,8 +118,8 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
     protected void onResume( ) {
         super.onResume();
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        workMode = sharedPrefs.getString(Constants.WORKMODE, "1");
-        Log.d("------------NOT FIRST--WOORK MODE----------: " + workMode.equals("0"), workMode);
+        workMode = sharedPrefs.getString(Constants.WORKMODE, "0");
+        Log.d("------------NOT FIRST--WOORK MODE----------: " + workMode.equals("1"), workMode);
         if (workMode.equals("0")) {
             startActivity(new Intent(getApplicationContext(), User_Activity.class));
         } else {

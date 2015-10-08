@@ -9,18 +9,26 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import mesas.martinez.leonor.iBoBlind.R;
 import mesas.martinez.leonor.iBoBlind.Services.SpeechBluService;
 import mesas.martinez.leonor.iBoBlind.model.Constants;
+import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager;
+
+import java.util.List;
 
 /**
  * Created by root on 5/08/15.
@@ -48,14 +56,52 @@ public class User_Activity extends ActionBarActivity  {
             startActivityForResult(enableBtIntent, ENABLE_BT);
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        Log.d("User_Activity","--OnBackPressed--");
+        CharSequence text= stop_start.getText();
+        if(text.equals(getResources().getString(R.string.stop_service))){
+            String back_pressed=getResources().getString(R.string.back_pressed);
+            Toast.makeText(this, back_pressed, Toast.LENGTH_LONG).show();
+//            try {
+//                wait(500);
+//            } catch (InterruptedException e) {
+//
+//            }
+
+        }
+        moveTaskToBack(true);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            Log.d("User_Activity","--OnBackPressed--");
+            CharSequence text= stop_start.getText();
+            if(text.equals(getResources().getString(R.string.stop_service))){
+                String back_pressed=getResources().getString(R.string.back_pressed);
+                Toast.makeText(this, back_pressed, Toast.LENGTH_LONG).show();
+//                try {
+//                    wait(500);
+//                } catch (InterruptedException e) {
+//
+//                }
+
+            }
+            moveTaskToBack(true);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     //----------------------------------------Methods--------------------------------/
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        workMode = sharedPrefs.getString(Constants.WORKMODE, "1");
-        Log.d("------------NOT FIRST--WOORK MODE----------: " + workMode.equals("0"), workMode);
+        workMode = sharedPrefs.getString(Constants.WORKMODE, "0");
+        Log.d("------------NOT FIRST--WOORK MODE----------: " + workMode.equals("1"), workMode);
         if (workMode.equals("1")) {
             startActivity(new Intent(getApplicationContext(), Installer_Activity.class));
         } else {
@@ -152,25 +198,42 @@ public class User_Activity extends ActionBarActivity  {
     }
         //---------------My Methods---------------------//
         private void startService(){
-        //
-          //Is bluetooth on
+            //Comprobar si estan activos los elementos necesarios
+            PackageManager pm=getPackageManager();
+            List<ResolveInfo> activities=pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH),0);
+            //Is TTS intaller
+            if(activities.size()!=0){
+                Log.d("User_Activity/\n", "                           --------------------SPEECH RECOGNIZE---------------               ");
+                //Is bluetooth on
                 final BluetoothManager BluetoothManager = (android.bluetooth.BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
                 BluetoothAdapter mBluetoothAdapter = BluetoothManager.getAdapter();
 
-            if (mBluetoothAdapter== null || !mBluetoothAdapter.isEnabled()) {
-                Log.i("starScan","BLUETOOH is OFF");
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, ENABLE_BT);}
+                if (mBluetoothAdapter== null || !mBluetoothAdapter.isEnabled()) {
+                    Log.i("starScan","BLUETOOH is OFF");
+                    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                    startActivityForResult(enableBtIntent, ENABLE_BT);
+                }else{
+                    Log.d("User_Activity/\n", "                          ---------------------BLUETOOH ON----------------               ");
+
+
+                    serviceState = SpeechBluService.State.CONNECTING.name();
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                            .edit()
+                            .putString(Constants.SERVICE_STATE, serviceState)
+                            .commit();
+                    Intent intent = new Intent(Intent.ACTION_SYNC, null, this, SpeechBluService.class);
+                    startService(intent);
+                    buttonText=getResources().getString(R.string.stop_service);
+                    stop_start.setText(buttonText);
+                }
+            }else{
+                Log.i("starScan","SPEECH NOT INSTALLED");
+                Intent installTTS= new Intent();
+                installTTS.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivity(installTTS);
+            }
         //
-        serviceState = SpeechBluService.State.CONNECTING.name();
-            PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .edit()
-                .putString(Constants.SERVICE_STATE, serviceState)
-                .commit();
-        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, SpeechBluService.class);
-        startService(intent);
-        buttonText=getResources().getString(R.string.stop_service);
-        stop_start.setText(buttonText);
+
     }
 
 }
