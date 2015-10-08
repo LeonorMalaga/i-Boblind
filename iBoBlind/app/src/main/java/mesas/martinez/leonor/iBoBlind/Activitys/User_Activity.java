@@ -37,10 +37,11 @@ public class User_Activity extends ActionBarActivity  {
 
 //--------------------------------Contans----------------------------------//
     private final int ENABLE_BT = 2;
-    private static final int RESULT_SETTINGS = 1;
+ //   private static final int RESULT_SETTINGS = 1;
 //-------------------------------Variables---------------------------------//
     private String workMode;
     private Button stop_start;
+    private Button installer;
     private TextView user_first_text;
     private TextView user_secon_text;
     private TextView user_text;
@@ -69,7 +70,6 @@ public class User_Activity extends ActionBarActivity  {
 //            } catch (InterruptedException e) {
 //
 //            }
-
         }
         moveTaskToBack(true);
     }
@@ -87,7 +87,6 @@ public class User_Activity extends ActionBarActivity  {
 //                } catch (InterruptedException e) {
 //
 //                }
-
             }
             moveTaskToBack(true);
         }
@@ -111,9 +110,9 @@ public class User_Activity extends ActionBarActivity  {
             user_secon_text = (TextView) this.findViewById(R.id.user_second_textView);
             user_secon_text.setVisibility(View.INVISIBLE);
             user_text=(TextView) this.findViewById(R.id.user_textView);
+            installer=(Button) this.findViewById(R.id.installer_button);
             stop_start = (Button) this.findViewById(R.id.user_button);
             stop_start.setVisibility(View.INVISIBLE);
-
     }}
     @Override
     protected void onResume( ) {
@@ -132,7 +131,6 @@ public class User_Activity extends ActionBarActivity  {
             String firstText=getResources().getString(R.string.user_first_textView);
             user_first_text.setText(firstText);
             user_secon_text.setVisibility(View.INVISIBLE);
-
         }
 
         stop_start.setOnClickListener(new View.OnClickListener() {
@@ -148,28 +146,48 @@ public class User_Activity extends ActionBarActivity  {
                     stop_start.setVisibility(View.VISIBLE);
                 }else{
                    //stop Service and change the button text
-                    Intent intent = new Intent(Constants.SERVICE_STOP);
-                    LocalBroadcastManager.getInstance(User_Activity.this).sendBroadcastSync(intent);
-                    buttonText=getResources().getString(R.string.start_service);
-                    stop_start.setText(buttonText);
-                    String firstText=getResources().getString(R.string.user_first_textView);
-                    user_first_text.setText(firstText);
-                    user_secon_text.setVisibility(View.INVISIBLE);
+                    stopService();
                 }
+            }
+    });
+
+        installer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopService();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                        .edit()
+                        .putString(Constants.WORKMODE, "1")
+                        .commit();
+                startActivity(new Intent(getApplicationContext(), Installer_Activity.class));
 
             }
-    }); }
+        });
 
+
+
+
+    }
+private void stopService(){
+    //stop Service and change the button text
+    Intent intent = new Intent(Constants.SERVICE_STOP);
+    LocalBroadcastManager.getInstance(User_Activity.this).sendBroadcastSync(intent);
+    buttonText=getResources().getString(R.string.start_service);
+    stop_start.setText(buttonText);
+    String firstText=getResources().getString(R.string.user_first_textView);
+    user_first_text.setText(firstText);
+    user_secon_text.setVisibility(View.INVISIBLE);
+}
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case RESULT_SETTINGS:
-                super.onActivityResult(requestCode, resultCode, data);
-                //showUserSettings();
-                break;
+//            case RESULT_SETTINGS:
+//                super.onActivityResult(requestCode, resultCode, data);
+//                //showUserSettings();
+//                break;
             case ENABLE_BT:
                 if(resultCode!=RESULT_OK){finish();}
                 break;
@@ -178,24 +196,24 @@ public class User_Activity extends ActionBarActivity  {
                 break;
         }
     }
-    //----------------------Settings----------------------//
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivityForResult(i, RESULT_SETTINGS);
-                break;
-        }
-        return true;
-    }
+//    //----------------------Settings----------------------//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_settings:
+//                Intent i = new Intent(this, SettingsActivity.class);
+//                startActivityForResult(i, RESULT_SETTINGS);
+//                break;
+//        }
+//        return true;
+//    }
         //---------------My Methods---------------------//
         private void startService(){
             //Comprobar si estan activos los elementos necesarios
@@ -214,8 +232,6 @@ public class User_Activity extends ActionBarActivity  {
                     startActivityForResult(enableBtIntent, ENABLE_BT);
                 }else{
                     Log.d("User_Activity/\n", "                          ---------------------BLUETOOH ON----------------               ");
-
-
                     serviceState = SpeechBluService.State.CONNECTING.name();
                     PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                             .edit()
@@ -233,9 +249,7 @@ public class User_Activity extends ActionBarActivity  {
                 startActivity(installTTS);
             }
         //
-
     }
-
 }
 
 

@@ -78,8 +78,9 @@
     <string name="Out_Of">  Out Of  </string>
     <string name="approach_to">  Approach to </string>
     <string name="move_away_to">   Move away to </string>
-    <string name="stop_service"> STOP SERVICE </string>
-    <string name="start_service"> START SERVICE</string>
+    <string name="stop_service"> STOP SERVICE\n\n\n\n\n\n\nSTOP SERVICE\n\n\n\n </string>
+    <string name="installer_mode"> Change to installer mode </string>
+    <string name="start_service"> START SERVICE\n\n\n\n\n\n\nSTART SERVICE\n\n\n\n</string>
     <string name="back_pressed"> I-Boblind is running. If you want to stop it, you should open the app and press the stop button </string>
     <!-- settings -->
     <string name="title_activity_settings">Settings</string>
