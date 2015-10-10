@@ -96,7 +96,7 @@
         <ListView
             android:id="@+id/ibeacon_ListView"
             android:layout_width="match_parent"
-            android:layout_height="1000dp"
+            android:layout_height="500dp"
             android:layout_above="@+id/refresh_button"
             />
 

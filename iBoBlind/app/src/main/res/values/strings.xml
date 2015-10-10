@@ -54,6 +54,9 @@
     <string name="specification_name">PROJECT SPECIFICATION:</string>
     <string name="default_project_specification">This is my first project </string>
     <!-- activity_installer -->
+    <string name="cancel">Cancel</string>
+    <string name="signin">Continue</string>
+    <string name="password"> PASSWORD :</string>
     <string name="select_project_textView">SELECT PROJECT:</string>
     <string name="new_project_text">You should create a Project</string>
     <string name="new_project_button">New project</string>

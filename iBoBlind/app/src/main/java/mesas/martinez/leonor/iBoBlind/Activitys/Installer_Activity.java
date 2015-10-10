@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,17 +111,16 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_installer);
-
-
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        workMode = sharedPrefs.getString(Constants.WORKMODE, "0");
+        Log.d("------------Installer Activity----------NOT FIRST--WOORK MODE------: " + workMode.equals("1"), workMode);
     }
 
 
     @Override
     protected void onResume( ) {
         super.onResume();
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        workMode = sharedPrefs.getString(Constants.WORKMODE, "0");
-        Log.d("------------NOT FIRST--WOORK MODE----------: " + workMode.equals("1"), workMode);
+
         if (workMode.equals("0")) {
             startActivity(new Intent(getApplicationContext(), User_Activity.class));
         } else {
@@ -315,7 +316,45 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
 
         }
     }
-
+    private int indexOfBluetoothDevices(ArrayList<BluetoothDevice> array, String address){
+        int index=-1;
+        BluetoothDevice aux;
+        for(int x=0; x<array.size();x++){
+            aux=array.get(x);
+            if(aux.getAddress().equals(address)){
+                index=x;
+            }
+            //Log.d("BluetoothDevice ","------>" + x + " "+aux.getAddress());
+        }
+        return index;
+    }
+    private int indexOfMyBledevice(ArrayList<MyBledevice> array, String address){
+        int index=-1;
+        MyBledevice aux;
+        for(int x=0; x<array.size();x++){
+            aux=array.get(x);
+            if(aux.device.getAddress().equals(address)){
+                index=x;
+            }
+           // Log.d("MyBledevice ","------>" + x + " "+aux.device.getAddress());
+        }
+        return index;
+    }
+ //----------------------On Back Presseg, go out------------------//
+    @Override
+    public void onBackPressed() {
+        Log.d("Installer Activity","--OnBackPressed--");
+        moveTaskToBack(true);
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            Log.d("Installer Activity","--OnBackPressed--");
+            moveTaskToBack(true);
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+  //-----------------------Fin Go out-----------------------------------//
     //----------------Auxyliar Class------------------------//
 
     // adaptor
@@ -331,13 +370,25 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
 
         public void addDevice(BluetoothDevice device) {
             if (!mLeDevices.contains(device)) {
-                mLeDevices.add(device);
+                int i= indexOfBluetoothDevices(mLeDevices, device.getAddress());
+                Log.d("Index of Device : ",device.getAddress()+" is "+i);
+                if(i>=0){
+                    mLeDevices.remove(i);
+                    mLeDevices.add(i,device);
+                }else{
+                    mLeDevices.add(device);}
             }
         }
 
         public void myaddDevice(MyBledevice device) {
             if (!myLeDevices.contains(device)) {
-                myLeDevices.add(device);
+               int i= indexOfMyBledevice(myLeDevices, device.device.getAddress());
+                Log.d("Index of Device : ",device.device.getAddress()+" is "+i);
+                if(i>=0){
+                    myLeDevices.remove(i);
+                    myLeDevices.add(i,device);
+                }else{
+                myLeDevices.add(device);}
             }
         }
 
