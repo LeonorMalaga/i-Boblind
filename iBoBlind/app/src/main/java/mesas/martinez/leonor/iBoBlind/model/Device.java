@@ -1,5 +1,7 @@
 package mesas.martinez.leonor.iBoBlind.model;
 
+import android.util.Log;
+
 import java.io.Serializable;
 
 /**
@@ -28,7 +30,10 @@ public class Device implements Serializable {
      */
     public Device() {
     }
-
+    public Device(String mDeviceAddress) {
+        this.mDeviceAddress = mDeviceAddress;
+        this.mdate = String.valueOf(System.currentTimeMillis());
+    }
     public Device(int idprojecto, String mDeviceAddress, String latitude, String longitude, String mDeviceName, String mDeviceSpecification, String maxRssi) {
         this.projecto_id = idprojecto;
         this.mDeviceAddress = mDeviceAddress;
@@ -59,6 +64,14 @@ public class Device implements Serializable {
 
     public int get_id() {
         return _id;
+    }
+
+    public boolean isNull(Device d){
+        boolean r=false;
+        if(d.getDeviceSpecification().equals(null)){r=true;}
+        if(d.getmDeviceAddress().equals(null)){r=true;}
+        if(d.getMaxRSSI().equals(null)){r=true;}
+        return r;
     }
 
     public String getLatitude() {

@@ -246,6 +246,7 @@ public class OrionJsonManager {
             reader= new JSONObject(answer);
             if(reader.has("errorCode")){
                 Log.i("Received Server Error",answer);
+
             }else{
                 contextResponses=reader.getJSONArray("contextResponses");
                 message=contextResponses.getString(0);
@@ -254,6 +255,10 @@ public class OrionJsonManager {
                 contextElement=JsoncontextResponses.getJSONObject("contextElement");
                 attributes=contextElement.getJSONArray("attributes");
                 device=getDeviceFromJsonArray(attributes);
+            }
+
+            if(answer.indexOf("No context element found")!=-1){
+                message="Not found";
             }
         } catch (JSONException e) {
             Log.i("Can¨t combert response to JSOM, response:",answer);
@@ -294,9 +299,12 @@ public class OrionJsonManager {
                             ProjectDAO projectDAO=new ProjectDAO(context);
                             projectDAO.open();
                             Project projectaux=projectDAO.getProjectByName(projectName);
-                            projectDAO.close();
                             this.project_id=projectaux.get_id();
-
+                            if(this.project_id==-1){
+                                projectaux=new Project(this.projectName,"Create by User");
+                                projectDAO.create(projectaux);
+                                this.project_id=projectaux.get_id();}
+                            projectDAO.close();
                             break;
                         default:
 

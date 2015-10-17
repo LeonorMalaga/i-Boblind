@@ -77,9 +77,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             + COLUMN_DEVICE_ESPECIFICATION + " text, "
             + COLUMN_MAX_RSSI+ " text, "
             + COLUMN_LATITUDE+ " text, "
-            + COLUMN_LONGITUDE+ " text, "
-            + " CONSTRAINT uc_PersonID UNIQUE ("+COLUMN_PROJECT_ID+","+COLUMN_DEVICE_ADDRESS+") );"
-            ;
+            + COLUMN_LONGITUDE+ " text) ";
+//            + " CONSTRAINT uc_PersonID UNIQUE ("+COLUMN_PROJECT_ID+","+COLUMN_DEVICE_ADDRESS+") );"
+//            ;
 
 //    private static final String DATABASE_CREATE_PROJECTS = "create table if not exists "
 //            + TABLE_PROJECTS + " ( "

@@ -27,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +106,6 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
             });
         }
     };
-
     //---------------------Principal Methods---------------//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +114,14 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         workMode = sharedPrefs.getString(Constants.WORKMODE, "0");
         Log.d("------------Installer Activity----------NOT FIRST--WOORK MODE------: " + workMode.equals("1"), workMode);
+        //we do this, if whe don't
+        String defaultUrl=this.getApplicationContext().getResources().getString(R.string.default_import_editText);
+        //Log.i("-----HTTP_JSON_POST url:----",defaultUrl);
+        defaultUrl = sharedPrefs.getString(Constants.SERVER, defaultUrl);
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+                .edit()
+                .putString(Constants.SERVER, defaultUrl)
+                .commit();
     }
 
 
@@ -452,5 +460,6 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
             return view;
         }
     }
+
 
 }

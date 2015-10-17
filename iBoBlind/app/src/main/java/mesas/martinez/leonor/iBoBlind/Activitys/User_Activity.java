@@ -178,12 +178,6 @@ public class User_Activity extends ActionBarActivity  {
                 Log.i("clicked","----------installer mode--------");
                 LoginDialog password=new LoginDialog(User_Activity.this);
                 password.show();
-//                stopService();
-//                PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-//                        .edit()
-//                        .putString(Constants.WORKMODE, "1")
-//                        .commit();
-//                startActivity(new Intent(getApplicationContext(), Installer_Activity.class));
 
             }
         });}}

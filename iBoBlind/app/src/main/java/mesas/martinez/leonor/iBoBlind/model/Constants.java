@@ -16,8 +16,6 @@ public class Constants {
 
    // public static final String URLGET="getUrl";
     public static final String WORKMODE="work_mode_list";
-    public static final String SAVEMODE="work_save_list";
-    public static final String MEASURES="Leonor.martinez.mesas.settings.measuresFORaverage";
     public static final String DIFER="Leonor.martinez.mesas.settings.diferAverage";
     public static final String MOVEMENT="Leonor.martinez.mesas.settings.movement";
     public static final String TIME="Leonor.martinez.mesas.settings.time";
@@ -38,10 +36,9 @@ public static final String SERVICE_STATE="Leonor.martinez.mesas.user.activity.SE
 public static final String SERVICE_STOP="Leonor.martinez.mesas.user.activity.SERVICE_STOP";
 public static final String SERVICE_WAIT_RESPONSE="Leonor.martinez.mesas.user.activity.SERVICE_WAIT_RESPONSE";
 public static final String SERVICE_UNKNOWN_STATE="Leonor.martinez.mesas.user.activity.SERVICE_UNKNOWN_STATE";
-public static final String DEVICE_ADDRESS="Leonor.martinez.mesas.user.activity.DEVICE_ADDRESS";
-public static final String DEVICE_RSSI="Leonor.martinez.mesas.user.activity.DEVICE_RSSI";
 public static final String DEVICE_MESSAGE="Leonor.martinez.mesas.user.activity.DEVICE_RSSI";
 public static final String DEVICE="Leonor.martinez.mesas.user.activity.DEVICE";
+public static final String BLACKDEVICE="Leonor.martinez.mesas.user.activity.BLACKDEVICE";
 public static final String BLUETOOTH_OFF="Leonor.martinez.mesas.user.activity.BLUETOOTH_OFF";
 
 
