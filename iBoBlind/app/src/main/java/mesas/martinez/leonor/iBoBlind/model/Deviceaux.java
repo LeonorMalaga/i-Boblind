@@ -38,7 +38,7 @@ public class Deviceaux {
         this.okaRssiOld=false;
         this.aRssi=new double[length];
         this.push(rssi);
-        this.diferTime=4;
+        this.diferTime=3;
         this.last_update=System.currentTimeMillis();
     }
     public Deviceaux(double rssi, String address) {
@@ -54,7 +54,7 @@ public class Deviceaux {
         this.okaRssiOld=false;
         aRssi=new double[length];
         push(rssi);
-        this.diferTime=4;
+        this.diferTime=3;
         this.last_update=System.currentTimeMillis();
     }
     public Deviceaux(double rssi, String address,int diferTime) {
@@ -99,7 +99,7 @@ public class Deviceaux {
         this.dBmRSSI = -85.0;
         this.outOfRegion = -85.0;
         this.text = "leonormartinezmesas@gmail";
-        this.diferTime=4;
+        this.diferTime=3;
       this.last_update=System.currentTimeMillis();
     }
    public Deviceaux(Device device,Double rssi) {
@@ -115,7 +115,7 @@ public class Deviceaux {
         this.a = 0;
         aRssi=new double[length];
         push(rssi);
-        this.diferTime=4;
+        this.diferTime=3;
        this.last_update=System.currentTimeMillis();
     }
   public Deviceaux(String address,int maxRssi, String deviceSpecification,int rssi) {
@@ -131,7 +131,7 @@ public class Deviceaux {
         this.a = 0;
         aRssi=new double[length];
         push(rssi);
-        this.diferTime=4;
+        this.diferTime=3;
       this.last_update=System.currentTimeMillis();
     }
     public Deviceaux(String address,int maxRssi, String deviceSpecification,int rssi, int diferTime) {

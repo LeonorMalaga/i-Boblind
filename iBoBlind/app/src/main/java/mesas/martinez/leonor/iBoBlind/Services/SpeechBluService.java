@@ -68,10 +68,6 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
     //-------------for text movement----------//
     //private Rotation rotate;
     private Accelerometer accelerometer;
-    protected static int MIN_TIME_SENSIVILITI = 100000000;
-    protected int time_sensitivity;
-    protected long time_difference = 2;
-    protected float min_movement = 12;
     private ArrayList<Deviceaux> mDevicesArray;
     private ArrayList<Device> blackListArray;
 
@@ -91,7 +87,7 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
     }
 
     private static final long SCAN_TIMEOUT = 800;
-    private static final long WAIT_PERIOD = 2000;
+    private static final long WAIT_PERIOD = 1000;
 
     private String address;
     private String device_name;
@@ -197,21 +193,23 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
         return result;
     }
     private void setMovementAtributes() {
+        float auxminmovement=9f;
+        long auxtime=15;
         try {
             if (!isFastMovement()) {
                 //Value for a slow movement
-                min_movement = sharePreference.getInt(Constants.MOVEMENT, 13);
-                time_sensitivity = sharePreference.getInt(Constants.MOVEMENT, 30);
+                auxminmovement = sharePreference.getInt(Constants.MOVEMENT, 10);
+                auxtime = sharePreference.getInt(Constants.MOVEMENT, 30);
             } else {
                 //Value for a fast movement
-                min_movement = sharePreference.getInt(Constants.MOVEMENT, 19);
-                time_sensitivity = sharePreference.getInt(Constants.MOVEMENT, 15);
+                auxminmovement = sharePreference.getInt(Constants.MOVEMENT, 19);
+                auxtime = sharePreference.getInt(Constants.MOVEMENT, 13);
             }
             diferAverage = sharePreference.getInt(Constants.DIFER, 3);
-            min_movement = (float) min_movement / 10;
-            accelerometer.setMin_movement(min_movement);
-            time_sensitivity = time_sensitivity * MIN_TIME_SENSIVILITI;
-            accelerometer.setTime_sensitivity(time_sensitivity);
+            auxminmovement = (float) auxminmovement / 10;
+            accelerometer.setMin_movement(auxminmovement);
+            accelerometer.time_sensitivity = accelerometer.time_sensitivity * accelerometer.MIN_TIME_SENSIVILITI;
+            accelerometer.setTime_sensitivity(auxminmovement);
         } catch (NullPointerException e) {
             Log.e("OnDeviceDetected nullPointException", e.getLocalizedMessage() + e.getMessage());
             e.printStackTrace();
@@ -221,8 +219,10 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
     //------------------to-Speak--Methods---------------------------//
     @Override
     public void onInit(int status) {
+        String country=Locale.getDefault().getISO3Country();
+        String language=Locale.getDefault().getISO3Language();
         if (status == TextToSpeech.SUCCESS) {
-            Locale locSpainh = new Locale("spa", "ESP");
+            Locale locSpainh = new Locale(language, country);
             int result = tts.setLanguage(locSpainh);
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Toast.makeText(this, "This Language is not supported", Toast.LENGTH_LONG).show();
@@ -269,13 +269,13 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
     }
     }
 
-    protected void speakTheText() {
+    protected void speakTheText(String Text) {
 
-        Log.v("--SPEAKtheTEXT---", toSpeak);
+        Log.v("--SPEAKtheTEXT---", Text);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ttsUnder21(toSpeak);
+            ttsUnder21(Text);
         } else {
-            ttsUnder20(toSpeak);
+            ttsUnder20(Text);
         }
 
 
@@ -334,24 +334,21 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
                     if (id != -1) {
                         int mrssi = intent.getIntExtra("rssi", 0);
                         int mcoberageAlert = intent.getIntExtra("coverageAlert", 0);
-                        toSpeak = intent.getStringExtra("message");
+                        String Text = intent.getStringExtra("message");
                         String maddress = intent.getStringExtra("address");
                         //Log.i("OnL--INTENT DEVICE received-------------",maddress+", mesage: "+toSpeak+", rssi "+String.valueOf(mrssi)+", coberageAlert"+String.valueOf(mrssi));
-
-                        if (!toSpeak.equals(null)) {
-                            SpeechBluService.this.speakTheText();
-                            //speakTheText(toSpeak);
+                        if (!Text.equals(null)) {
                             Deviceaux mdeviceaux = new Deviceaux(maddress, mcoberageAlert, toSpeak, mrssi);
                             int index = mDevicesArray.indexOf(mdeviceaux);
                             //Log.d("OnL--INTEN DEVICE--","------ index: "+ String.valueOf(index));
                             if (index < 0) {
                                 mDevicesArray.add(mdeviceaux);
-                                index = mDevicesArray.indexOf(mdeviceaux);
                                 //Log.d("OnL--INTEN DEVICE--","---device added--- index: "+ String.valueOf(index));
                             } else {
                                 mDevicesArray.set(index, mdeviceaux);
                                 //Log.d("OnL--INTEN DEVICE--","---device update--- index: "+ String.valueOf(index));
                             }
+                            SpeechBluService.this.speakTheText(Text);
                         }
                     }
                     SpeechBluService.this.setState(State.UNKNOWN);
@@ -360,8 +357,8 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
                     toSpeak = intent.getStringExtra("message");
                     // Log.i("-----------INTENT received-------------","---DEVICE_MESSAGE--"+toSpeak);
                     if (!toSpeak.equals(null))
-                        SpeechBluService.this.speakTheText();
-                    //speakTheText(toSpeak);
+                        SpeechBluService.this.speakTheText(toSpeak);
+
                     break;
                 case Constants.SERVICE_STOP:
                     SpeechBluService.this.mstop();
@@ -524,9 +521,9 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
                     jsonManager.setDeviceName(device_name);
                 }
                 new HTTP_JSON_POST(this, jsonManager, address, rssi).execute();
+
             } else  if (rssi >= auxdevice.getOutOfRegion()) {
-                    toSpeak = Oldmessage;
-                    speakTheText();
+                    speakTheText(Oldmessage);
                     mDevicesArray.add(auxdevice);
             }
         } else {
@@ -599,13 +596,13 @@ private boolean isBlackDevice(String Adrees){
     //---------------------------------------------------------------Fin-----When a i-becaon is detected---------------------------------------//
     //---------------Device again--------------------//
     private void speakUpdateDeviceauxAgain(int index, int rssi) {
+        double lastRSSI =mDevicesArray.get(index).getdBmRSSI();
+        mDevicesArray.get(index).setdBmRSSI(rssi);
         if(mDevicesArray.get(index).RangeOfTime()){
         setMovementAtributes();
         String address = mDevicesArray.get(index).getAddress();
         String speak = mDevicesArray.get(index).getText();
         double limitRegion = mDevicesArray.get(index).getOutOfRegion();
-        double lastRSSI =mDevicesArray.get(index).getdBmRSSI();
-        mDevicesArray.get(index).setdBmRSSI(rssi);
         double difer =mDevicesArray.get(index).difer();
         if(difer==0.0f){
             difer=rssi-lastRSSI;
@@ -622,7 +619,7 @@ private boolean isBlackDevice(String Adrees){
                if ( average > -56 && average !=0) {
                    if(mDevicesArray.get(index).getCount()<2){
                    String Text = getResources().getString(R.string.close_up);
-                   toSpeak = Text + speak;
+                   speak = Text + speak;
                    mDevicesArray.get(index).plusOneCount();}
                } else if (difer < -diferAverage) {
                     //move away
@@ -633,12 +630,12 @@ private boolean isBlackDevice(String Adrees){
                     if (b == -1) {
                         mDevicesArray.get(index).setdBmRSSI(rssi);
                         String Text = getResources().getString(R.string.Out_Of);
-                        toSpeak = Text + speak;
+                        speak = Text + speak;
                         mDevicesArray.remove(index);
                         mDevicesArray.get(index).setCounttocero();
                     } else {
                         String Text = getResources().getString(R.string.move_away_to);
-                        toSpeak = Text + speak;
+                        speak = Text + speak;
                         mDevicesArray.get(index).minusOneCount();
                     }
                 } else {
@@ -646,12 +643,12 @@ private boolean isBlackDevice(String Adrees){
                     //approach
                     if (difer > diferAverage) {
                         String Text = getResources().getString(R.string.approach_to);
-                        toSpeak = Text + speak;
+                        speak = Text + speak;
                         mDevicesArray.get(index).minusOneCount();
                     }
                 }
                Log.d("SPEECHBLUSERVICE SpeakupdatedeviceAUX",  " " + address+"--To Speak " + toSpeak );
-               SpeechBluService.this.speakTheText();
+               SpeechBluService.this.speakTheText(speak);
             }
 
     }//if Rage Of time OK
@@ -720,19 +717,20 @@ private boolean isBlackDevice(String Adrees){
         private float curX = 0, curY = 0, curZ = 0;
         private float movement;
         private float oldmovement;
-        private int time_sensitivity;
+        protected int MIN_TIME_SENSIVILITI = 100000000;
+        protected long time_sensitivity= 150000000;
         private float min_movement = 11;
         private float mMovement = 0;
         //float base_movement = 1E-6f;
-        private long time_difference;
+        private long time_difference=2;
         private long current_time;
         private SensorManager sm;
         private List<Sensor> sensors;
-        private float[] movements = {0f, 0f, 0f, 0f, 0f, 0f};
+        private float[] movements = {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
         //        int[]tendence={0,0,0,0,0,0,0,0};
-        float[] tendenceX = {0f, 0f, 0f, 0f, 0f, 0f};
-        float[] tendenceY = {0f, 0f, 0f, 0f, 0f, 0f};
-        float[] tendenceZ = {0f, 0f, 0f, 0f, 0f, 0f};
+        float[] tendenceX = {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
+        float[] tendenceY = {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
+        float[] tendenceZ = {0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f};
         float X = 0;
         float Y = 0;
         float Z = 0;
@@ -745,7 +743,7 @@ private boolean isBlackDevice(String Adrees){
 //        private Sensor msensor;
         int count = 0;
         int a = 0;
-        public int getTime_sensitivity() {
+        public long getTime_sensitivity() {
             return time_sensitivity;
         }
 
@@ -788,7 +786,7 @@ private boolean isBlackDevice(String Adrees){
             sensors = sm.getSensorList(Sensor.TYPE_ACCELEROMETER);
             for (int i = 0; i < sensors.size(); i++) {
                 Sensor e = sensors.get(i);
-                Log.d("SENSOR LIST IN POSITION " + i + " = ", e.getName() + " Maxrange" + e.getMaximumRange() + ", Resolution" + e.getResolution());
+                //Log.d("SENSOR LIST IN POSITION " + i + " = ", e.getName() + " Maxrange" + e.getMaximumRange() + ", Resolution" + e.getResolution());
             }
 
         }
@@ -805,12 +803,15 @@ private boolean isBlackDevice(String Adrees){
         public boolean RangeOfTime() {
             boolean response = false;
             //*5.0 because discober devices is slow that accelerometer
-            if (time_difference > (time_sensitivity)) {
+            if (time_difference > time_sensitivity) {
                 if(mMovement>min_movement){
                     response = true;
                     last_movement=current_time;
                 }   }
-            //Log.d(Constants.TAG, "-----RANGE OF TIMER------" + response + "--" + time_difference + " < " + (time_sensitivity));
+            if(!response){
+                Log.d("ACCELEROMETER", "-----RANGE OF TIMER----FALSE--" +address +" because time differ < time_sensitivity:--  " + time_difference + " < " + time_sensitivity+" , or because mMovement< min_movement:--"+mMovement+" < "+min_movement );
+            }
+
             return response;
         }
 
@@ -954,13 +955,13 @@ private boolean isBlackDevice(String Adrees){
                     push(curY, tendenceY);
                     push(curZ, tendenceZ);
                     push(movement, movements);
-                    if(count>movements.length){
+                    if(count > movements.length){
                         count=0;
                         mMovement = average(movements);
                         X = average(tendenceX);
                         Y = average(tendenceY);
                         Z = average(tendenceZ);
-                        //Log.v("Accelerometer RangeOfTime", " average Movement= " + String.valueOf(mMovement) + "-->[X,Y,Z]=  [ " + String.valueOf(X) + " , " + String.valueOf(Y)+ " , " + String.valueOf(Z) + " ]");
+                        Log.v("Accelerometer", " average Movement= " + String.valueOf(mMovement) + "-->[X,Y,Z]=  [ " + String.valueOf(X) + " , " + String.valueOf(Y)+ " , " + String.valueOf(Z) + " ]");
                         prevX = curX;
                         prevY = curY;
                         prevZ = curZ;
