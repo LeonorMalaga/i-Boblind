@@ -206,7 +206,12 @@ public class HTTP_JSON_POST extends AsyncTask<String,Void,String>{
                         mDevice =new Device(projectaux.get_id(), address, mlatitude, mlongitude, name, message, rssi);
                         deviceDAO = new DeviceDAO(context);
                         deviceDAO.open();
-                        int device_id = deviceDAO.create(mDevice);
+                        Device auxd=deviceDAO.getDeviceByAddress(address);
+                         int device_id = auxd.get_id();
+                       if(device_id!=-1){
+                           deviceDAO.update(mDevice);
+                       }else{
+                           device_id = deviceDAO.create(mDevice);}
                         deviceDAO.close();
 
                 mDevice.set_id(device_id);

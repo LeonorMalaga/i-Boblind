@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -25,9 +26,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +48,11 @@ import mesas.martinez.leonor.iBoBlind.Services.GPSservice;
 public class Installer_Activity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
     //atributtes
     private String project_name;
-    private Button new_project_button;
-    private Spinner projects_spinner;
     private ListView bluetooth_ListView;
     private Button find_ibeacon_button;
     private EditText specifications;
     private TextView data_validation;
+    private TextView instructions;
     private Project projectaux;
     private ProjectDAO projectDAO;
     private Device deviceaux;
@@ -128,7 +126,9 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
     @Override
     protected void onResume( ) {
         super.onResume();
-
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        workMode = sharedPrefs.getString(Constants.WORKMODE, "0");
+        Log.d("------------Installer Activity------------WOORK MODE------: " + workMode.equals("1"), workMode);
         if (workMode.equals("0")) {
             startActivity(new Intent(getApplicationContext(), User_Activity.class));
         } else {
@@ -137,13 +137,15 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
             LocalBroadcastManager.getInstance(this).sendBroadcastSync(intent);
             //
             specifications = (EditText) this.findViewById(R.id.device_specification_editText);
+            instructions=(TextView)this.findViewById(R.id.get_textView);
             data_validation = (TextView) this.findViewById(R.id.intaller_response_textView);
+//            String text=getResources().getString(R.string.search_i_beacon_textView);
+//            data_validation.setText(text);
+//            data_validation.setTextColor(Color.BLACK);
+            instructions.setVisibility(View.VISIBLE);
             data_validation.setVisibility(View.INVISIBLE);
-            new_project_button = (Button) this.findViewById(R.id.new_project_button);
             find_ibeacon_button = (Button) this.findViewById(R.id.find_ibeacon_button);
             bluetooth_ListView = (ListView) this.findViewById(R.id.ibeacon_ListView);
-            projects_spinner = (Spinner) this.findViewById(R.id.projects_show_spinner);
-            projects_spinner.setOnItemSelectedListener(this);
 
             final BluetoothManager BluetoothManager = (android.bluetooth.BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
             mBluetoothAdapter = BluetoothManager.getAdapter();
@@ -177,25 +179,12 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
 
             }
 
-            ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, arrayListaux);
-// Specify the layout to use when the list of choices appears
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-            projects_spinner.setAdapter(adapter);
-//Create a new project
-            new_project_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(getApplicationContext(), NewProject_Activity.class));
-                }
-            });
-
             bluetooth_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                     ble = mLeDeviceListAdapter.mygetDevice(pos);
                     Log.d("------->Device select---Adrees->" + ble.device.getAddress(), "---->rssi-->" + ble.rssi);
-                    data_validation.setVisibility(View.VISIBLE);
+                    //data_validation.setVisibility(View.VISIBLE);
                     gps = new GPSservice(getApplicationContext());
                     // check if GPS enabled
                     if (gps.canGetLocation()) {
@@ -213,27 +202,46 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
                     specifications_text = specifications.getText().toString();
                     projectDAO = new ProjectDAO(getApplicationContext());
                     projectDAO.open();
-                    project_name = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Constants.SPINNER_NAME, "Anonymous27");
+                    project_name = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Constants.SPINNER_NAME, "Default");
                     projectaux = projectDAO.getProjectByName(project_name);
                     project_id=projectaux.get_id();
                     projectDAO.close();
+                    if((project_id==-1)){
+                        //Create a Default Project
+                        Project project = new Project("Default", "Create by the app");
+                        ProjectDAO projectDAO = new ProjectDAO(getApplicationContext());
+                        projectDAO.open();
+                        project_id = projectDAO.create(project);
+                        projectDAO.close();
+                        project.set_id(project_id);
+                        projectaux.set_id(project_id);
+
+                    }
                     //Now We want to Now if the device is already registered in the database
                     deviceDAO = new DeviceDAO(getApplicationContext());
                     deviceDAO.open();
                     deviceaux = deviceDAO.getDeviceByAddressAndProject(address, projectaux.get_id());
                     deviceDAO.close();
-                    if((project_id==-1)){
-                        String cproject=getResources().getString(R.string.new_project_text);
-                        data_validation.setText(cproject);
-                    }else if ((deviceaux.get_id() != -1)) {
-                        data_validation.setText("This device can not be save.The device address already exist in the specified Project");
-                    } else {
+                   if ((deviceaux.get_id() != -1)) {
+                        String previousText=deviceaux.getDeviceSpecification();
+                        String rssiMax=deviceaux.getMaxRSSI();
+                        String text1=getResources().getString(R.string.update_existing_device);
+                       String text2=getResources().getString(R.string.by);
+                       String text3=getResources().getString(R.string.and_the_coberage_reguion);
+                       String text=text1+previousText+text2+specifications_text+text3+rssiMax+text2+rssi;
+
+                        data_validation.setText(text);
+                    }
+                        //data_validation.setTextColor(Color.parseColor("#01DFA5"));
+
+                        data_validation.setVisibility(View.VISIBLE);
+                        instructions.setVisibility(View.INVISIBLE);
                         OrionJsonManager jsonManager=new OrionJsonManager();
                         String json=jsonManager.SetJSONtoCreateEntity("BLE", address, mlatitude, mlongitude, specifications_text, rssi, "45713701M", project_name, deviceName) ;
                         //String query="/ngsi10/updateContext";
                         //new HTTP_JSON_POST(getApplicationContext(),data_validation,HTTP_JSON_POST.Gender.UPDATE_CREATE,json).execute();
                         new HTTP_JSON_POST(getApplicationContext(),jsonManager,data_validation).execute();
-                    }
+
 
                 }//onItemClick
             });
@@ -285,15 +293,16 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
 //----------------------Auxyliar Metodos--------------------------//
     private void setScanState(boolean value) {
         mScanning = value;
-        ((Button) this.findViewById(R.id.find_ibeacon_button)).setText(value ? "Stop": "Scan");
-      if(deviceFaund == 1){
-          String swo=this.getString(R.string.no_new_device);
-        ((TextView) this.findViewById(R.id.intaller_response_textView)).setText(swo);}
+        String scan= this.getApplicationContext().getResources().getString(R.string.find_ibeacon_button);
+        String stop=this.getApplicationContext().getResources().getString(R.string.stop);
+        ((Button) this.findViewById(R.id.find_ibeacon_button)).setText(value ? stop : scan);
     }
 
     //Set Scan botton
     public void onScan(View view) {
 // check Bluetooth is available and on
+        String text=getResources().getString(R.string.search_i_beacon_textView);
+        instructions.setVisibility(View.VISIBLE);
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(enableBtIntent);

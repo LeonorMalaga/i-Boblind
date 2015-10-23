@@ -46,10 +46,10 @@ public class SettingsActivity extends PreferenceActivity {
        // bindPreferenceSummaryToValue(findPreference(Constants.URLGET));
         bindPreferenceSummaryToValue(findPreference("work_mode_list"));
         bindPreferenceSummaryToValue(findPreference("server"));
-        bindPreferenceSummaryToValue(findPreference("measuresFORaverage"));
-        bindPreferenceSummaryToValue(findPreference("diferAverage"));
-        bindPreferenceSummaryToValue(findPreference("movement"));
-        bindPreferenceSummaryToValue(findPreference("time"));
+//        bindPreferenceSummaryToValue(findPreference("measuresFORaverage"));
+//        bindPreferenceSummaryToValue(findPreference("diferAverage"));
+//        bindPreferenceSummaryToValue(findPreference("movement"));
+//        bindPreferenceSummaryToValue(findPreference("time"));
     }
 
     @Override
@@ -155,10 +155,10 @@ public class SettingsActivity extends PreferenceActivity {
             //bindPreferenceSummaryToValue(findPreference(Constants.SAVEMODE));
            // bindPreferenceSummaryToValue(findPreference(Constants.URLGET));
             bindPreferenceSummaryToValue(findPreference("server"));
-            bindPreferenceSummaryToValue(findPreference("measuresFORaverage"));
-            bindPreferenceSummaryToValue(findPreference("diferAverage"));
-            bindPreferenceSummaryToValue(findPreference("movement"));
-            bindPreferenceSummaryToValue(findPreference("time"));
+//            bindPreferenceSummaryToValue(findPreference("measuresFORaverage"));
+//            bindPreferenceSummaryToValue(findPreference("diferAverage"));
+//            bindPreferenceSummaryToValue(findPreference("movement"));
+//            bindPreferenceSummaryToValue(findPreference("time"));
         }
     }
 

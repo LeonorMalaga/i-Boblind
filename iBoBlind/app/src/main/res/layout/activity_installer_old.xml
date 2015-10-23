@@ -17,17 +17,33 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/select_project_textView"
+        android:id="@+id/select_project_textView"
+        android:layout_gravity="center_horizontal" />
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@android:color/white"/>
-        <TextView
-            android:layout_width="wrap_content"
+            android:background="@android:color/black"/>
+    <Spinner
+        android:id="@+id/projects_show_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+      />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/black"/>
+        <Button
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/search_i_beacon_textView"
-            android:id="@+id/get_textView"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/material_blue_grey_950"/>
+            android:text="@string/new_project_button"
+            android:id="@+id/new_project_button"
+            android:layout_gravity="center_horizontal" />
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
@@ -59,7 +75,13 @@
             android:layout_width="fill_parent"
             android:layout_height="1dp"
             android:background="@android:color/white"/>
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_i_beacon_textView"
+        android:id="@+id/get_textView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/material_blue_grey_950"/>
 
     <Button
         android:layout_width="match_parent"
@@ -69,22 +91,24 @@
         android:layout_gravity="bottom"
         android:id="@+id/find_ibeacon_button"
         android:onClick="onScan"
-        android:text="@string/find_ibeacon_button"
+        android:text="Scan"
          />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/data_validation"
-            android:id="@+id/intaller_response_textView"
-            android:layout_gravity="center_horizontal"
-            android:textSize="15sp"
-            android:textColor="@color/material_deep_teal_200"/>
+
         <ListView
             android:id="@+id/ibeacon_ListView"
             android:layout_width="match_parent"
             android:layout_height="500dp"
             android:layout_above="@+id/refresh_button"
             />
+
+         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/data_validation"
+            android:id="@+id/intaller_response_textView"
+            android:layout_gravity="center_horizontal"
+             android:textSize="15sp"
+             android:textColor="@color/material_deep_teal_200"/>
 
 
     </LinearLayout>

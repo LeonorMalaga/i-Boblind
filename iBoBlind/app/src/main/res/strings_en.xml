@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">i-BoBlind</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <!-- LAYOUT -->
+    <!-- comunication-->
+    <string name="Data_send">Press to send data</string>
+    <string name="Data_get">Press to get device storage dates</string>
+    <string name="ipport_TextView">Ip:port:</string>
+    <string name="default_import_editText">130.206.114.226:1026</string>
+    <string name="device_TextView">device_name:</string>
+    <string name="default_device_editText">test</string>
+    <string name="datoTOsend_TextView">payload:</string>
+    <string name="default_datoTOsend">time=1234</string>
+    <string name="send_button">SEND:</string>
+    <string name="get_button">GET:</string>
+    <string name="error">Server not response:</string>
+    <string name="error_Server">Remote server error:</string>
+    <string name="saved">Saved device =</string>
+    <string name="with_text">, with associate text= </string>
+    <string name="saved_localandremote">, in remote Server and local dataBase</string>
+    <string name="saved_error">ERROR:Saved device =</string>
+    <string name="saved_not_local">, in remote Server but it can save in local dataBase </string>
+    <string name="saved_conflict_in_the_project">, in remote Server but it can save in local dataBase because the device already exit in the project</string>
+    <!-- activity_first_old -->
+    <string name="first_text">It´s the first time you open this app. The storage structure should be build</string>
+    <string name="button_Fill_Proyect">Fill Proyect data</string>
+    <string name="button_Build">Build</string>
+    <string name="Build_result">Not Building</string>
+    <!-- activity_first -->
+    <string name="button_Start">Start</string>
+    <string name="start_text">It´s the first time you open this app. You should change the SETTINGS:
+                              \n
+                              \nWork mode:
+                              \n  1-Work like a INSTALLER(detect beacon and save associate text).(default)
+                               \n  2-o like a USER(hear the associate text from a beacon wen you are near).
+                               \nDefault server address:
+                               \n  Is the public (url:port) of your NGSI server.
+                               \n  This APP was tested using the image Orion 4.22 of FIWARE platform
+                               \n  (www.cloud.lab.fiware.org).
+                               \n
+                               \nMore information in: i-boblid.host56.com
+                               </string>
+    <!-- new project-->
+    <string name="start_text_installer">It´s the first time you use this app like installer.
+                                       \nYou should define the project where the beacons will be associate.</string>
+    <string name="project_name_description">The project name has to be a unique short identifier.</string>
+    <string name="project_name">PROJECT NAME:</string>
+    <string name="save">SAVE</string>
+    <string name="default_project_name">Project_1</string>
+    <string name="specification_name_description">You can save any text here.</string>
+    <string name="specification_name">PROJECT SPECIFICATION:</string>
+    <string name="default_project_specification">This is my first project </string>
+    <!-- activity_installer -->
+    <string name="cancel">Cancel</string>
+    <string name="signin">Continue</string>
+    <string name="password"> PASSWORD :</string>
+    <string name="select_project_textView">SELECT PROJECT:</string>
+    <string name="new_project_text">You should create a Project</string>
+    <string name="new_project_button">New project</string>
+    <string name="find_ibeacon_button">Find i-beacon</string>
+    <string name="white_line"></string>
+    <string name="search_i_beacon_textView">Place the phone on i_beacon, click Scan, wait 5 seconds and select the i_beacon with the highest signal level. The latitude and longitude, also go to be put away</string>
+    <string name="save_button">SAVE</string>
+    <string name="device_specification">I_BEACON SPECIFICATION:</string>
+    <string name="device_specification_description">Write the text to show to the users</string>
+    <string name="default_device_specification">Elevator</string>
+    <string name="data_validation">Data Validation:</string>
+    <string name="no_new_device">No new device detected</string>
+    <!-- activity-and-service-for-user -->
+    <string name="user_first_textView">Press the button to start ,the service detection of I_beacons.</string>
+    <string name="user_first_text">Press the button to stop ,the service detection of I_beacons.</string>
+    <string name="can_detect_Ibeacon">I-BEACON DETECTION SERVICE INITIATED IN BACKGROUND.</string>
+    <string name="service_stopped"> SERVICE STOPPED </string>
+    <string name="user_second_textView">You can abandon this view, the service will continue running. You will be notified of the presence of registered i-beacons, near of you.</string>
+    <string name="stopping"> Stopping the service, Bluetooth is OFF </string>
+    <string name="turn_on_Bluetooth"> Please turn On your Bluetooth</string>
+    <string name="can_not_detect_Ibeacon"> NOW YOU CAN NOT DETECT I-BEACONS </string>
+    <string name="Out_Of">  Out Of  </string>
+    <string name="approach_to"> Approach to </string>
+    <string name="move_away_to"> Move away to </string>
+    <string name="close_up"> Your are very close up to </string>
+    <string name="stop_service"> STOP SERVICE\n\n\n\n\n\n\nSTOP SERVICE\n\n\n\n </string>
+    <string name="installer_mode"> Change to installer mode </string>
+    <string name="start_service"> START SERVICE\n\n\n\n\n\n\nSTART SERVICE\n\n\n\n</string>
+    <string name="back_pressed"> I-Boblind is running. If you want to stop it, you should open the app and press the stop button </string>
+    <!-- settings -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_work_mode"> SELECT WORK MODE</string>
+
+    <string-array name="pref_work_mode_list_titles">
+        <item>Installer</item>
+        <item>User</item>
+    </string-array>
+    <string-array name="pref_work_mode_list_values">
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
+   <!-- <string name="pref_save_mode">Select save mode</string>
+
+    <string-array name="pref_work_save_list_titles">
+        <item>LOCAL</item>
+        <item>SERVER</item>
+    </string-array>
+    <string-array name="pref_work_save_list_values">
+        <item>1</item>
+        <item>0</item>
+    </string-array>-->
+    <string name="pref_server">SERVER ADREES:</string>
+    <string name="title_activity_main_activity2">MainActivity2</string>
+
+    <string name="pref_get_url">WRITES GET URL:</string>
+    <string name="pref_default_get_url">http://10.27.39.100:8080/get/</string>
+    <string name="measuresFORaverage">Steps to stabilize the received power:</string>
+    <string name="pref_default_measuresFORaverage">3</string>
+
+    <string name="diferAverage">Difference between Measures:</string>
+    <string name="pref_default_diferAverage">2</string>
+
+    <string name="movement">Movement sensitivity:</string>
+    <string name="pref_default_movement">11</string>
+
+    <string name="time">Time sensitivity:</string>
+    <string name="pref_default_time">20</string>
+</resources>
+

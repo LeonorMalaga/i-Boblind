@@ -3,34 +3,34 @@
 
     <string name="app_name">i-BoBlind</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configuración</string>
     <!-- LAYOUT -->
     <!-- comunication-->
-    <string name="Data_send">Press to send data</string>
-    <string name="Data_get">Press to get device storage dates</string>
+    <string name="Data_send">Pulse para enviar los datos</string>
+    <string name="Data_get">Pulse para obtener los datos almacenados del dispositivo</string>
     <string name="ipport_TextView">Ip:port:</string>
     <string name="default_import_editText">130.206.114.226:1026</string>
-    <string name="device_TextView">device_name:</string>
+    <string name="device_TextView">Nombre del dispositivo:</string>
     <string name="default_device_editText">test</string>
     <string name="datoTOsend_TextView">payload:</string>
     <string name="default_datoTOsend">time=1234</string>
-    <string name="send_button">SEND:</string>
-    <string name="get_button">GET:</string>
-    <string name="error">Server not response:</string>
-    <string name="error_Server">Remote server error:</string>
-    <string name="saved">Saved device =</string>
-    <string name="with_text">, with associate text= </string>
-    <string name="saved_localandremote">, in remote Server and local dataBase</string>
-    <string name="saved_error">ERROR:Saved device =</string>
-    <string name="saved_not_local">, in remote Server but it can save in local dataBase </string>
-    <string name="saved_conflict_in_the_project">, in remote Server but it can save in local dataBase because the device already exit in the project</string>
+    <string name="send_button">Enviar:</string>
+    <string name="get_button">Obtener:</string>
+    <string name="error">El servidor no responde:</string>
+    <string name="error_Server">Error del servidor remoto:</string>
+    <string name="saved">Se a guardado los datos del dispositivo :</string>
+    <string name="with_text">, con texto asociado= </string>
+    <string name="saved_localandremote">, en el servidor remoto y en la base de datos local</string>
+    <string name="saved_error">  ERROR : </string>
+    <string name="saved_not_local">,Se pudo guardar en el Servidor remoto pero no en la base de datos Local </string>
+    <string name="device_alreadi_exit">,No se pudo almacenar, pues el dispositivo ya esiste en la base de datos Local </string>
     <!-- activity_first_old -->
-    <string name="first_text">It´s the first time you open this app. The storage structure should be build</string>
-    <string name="button_Fill_Proyect">Fill Proyect data</string>
-    <string name="button_Build">Build</string>
-    <string name="Build_result">Not Building</string>
+    <string name="first_text">Es la primera vez que abre esta aplicacion. La estructura de la base de datos a de construirse.</string>
+    <string name="button_Fill_Proyect">Buscar Proyectos</string>
+    <string name="button_Build">Construir</string>
+    <string name="Build_result">No Construir</string>
     <!-- activity_first -->
-    <string name="button_Start">Start</string>
+    <string name="button_Start">Comenzar</string>
     <string name="start_text">It´s the first time you open this app. You should change the SETTINGS:
                               \n
                               \nWork mode:
@@ -48,52 +48,57 @@
                                        \nYou should define the project where the beacons will be associate.</string>
     <string name="project_name_description">The project name has to be a unique short identifier.</string>
     <string name="project_name">PROJECT NAME:</string>
-    <string name="save">SAVE</string>
+    <string name="save">GUARDAR</string>
     <string name="default_project_name">Project_1</string>
     <string name="specification_name_description">You can save any text here.</string>
     <string name="specification_name">PROJECT SPECIFICATION:</string>
     <string name="default_project_specification">This is my first project </string>
-    <!-- activity_installer -->
-    <string name="cancel">Cancel</string>
-    <string name="signin">Continue</string>
-    <string name="password"> PASSWORD :</string>
+    <!-- activity_installer-->
+    <string name="cancel">Cancelar</string>
+    <string name="signin">Continuar</string>
+    <string name="password"> Clave :</string>
     <string name="select_project_textView">SELECT PROJECT:</string>
     <string name="new_project_text">You should create a Project</string>
     <string name="new_project_button">New project</string>
-    <string name="find_ibeacon_button">Find i-beacon</string>
+    <string name="find_ibeacon_button">BUSCAR</string>
     <string name="white_line"></string>
-    <string name="search_i_beacon_textView">Place the phone on i_beacon, click Scan, wait 5 seconds and select the i_beacon with the highest signal level. The latitude and longitude, also go to be put away</string>
-    <string name="save_button">SAVE</string>
-    <string name="device_specification">I_BEACON SPECIFICATION:</string>
-    <string name="device_specification_description">Write the text to show to the users</string>
-    <string name="default_device_specification">Elevator</string>
-    <string name="data_validation">Data Validation:</string>
-    <string name="no_new_device">No new device detected</string>
+    <string name="search_i_beacon_textView"> PASOS: 1-Escriba el texto a asociar al i-beacon.\n2-Coloque el teléfono sobre el i_beacon, pulse sobre BUSCAR. El i-beacon con nivel de potencia mayor es el que desea almacenar, fíjese en el nombre.\n3-Muévase a la posición en la que desea que empiece a reproducirse el texto.Pulse de nuevo en BUSCAR, tras esto, pulse sobre el nombre del dispositivo y sera almacenado.</string>
+    <string name="save_button">GUARDAR</string>
+    <string name="device_specification">MENSAJE A REPRODUCIR:</string>
+    <string name="device_specification_description">Escriba el texto a asociar al dispositibo</string>
+    <string name="default_device_specification">Ascensor</string>
+    <string name="data_validation">Validación de datos:</string>
+    <string name="no_new_device">No hay dispositivos nuevos detectados</string>
+    <string name="saved_conflict_in_the_project">, guardado en el servidor remoto, pero no a podido ser almacenado el la base de datos local</string>
+    <string name="update_existing_device">"Se procede a actualidar el dispositivo, cambiando el texto asociado : "</string>
+    <string name="by">" por : "</string>
+    <string name="and_the_coberage_reguion">" y la potencia a partir de la cual se reproducira el texto asociado que antes era : "</string>
     <!-- activity-and-service-for-user -->
-    <string name="user_first_textView">Press the button to start ,the service detection of I_beacons.</string>
-    <string name="user_first_text">Press the button to stop ,the service detection of I_beacons.</string>
-    <string name="can_detect_Ibeacon">I-BEACON DETECTION SERVICE INITIATED IN BACKGROUND.</string>
-    <string name="service_stopped"> SERVICE STOPPED </string>
-    <string name="user_second_textView">You can abandon this view, the service will continue running. You will be notified of the presence of registered i-beacons, near of you.</string>
-    <string name="stopping"> Stopping the service, Bluetooth is OFF </string>
-    <string name="turn_on_Bluetooth"> Please turn On your Bluetooth</string>
-    <string name="can_not_detect_Ibeacon"> NOW YOU CAN NOT DETECT I-BEACONS </string>
-    <string name="Out_Of">  Out Of  </string>
-    <string name="approach_to"> Approach to </string>
-    <string name="move_away_to"> Move away to </string>
-    <string name="close_up"> Your are very close up to </string>
-    <string name="stop_service"> STOP SERVICE\n\n\n\n\n\n\nSTOP SERVICE\n\n\n\n </string>
-    <string name="installer_mode"> Change to installer mode </string>
-    <string name="start_service"> START SERVICE\n\n\n\n\n\n\nSTART SERVICE\n\n\n\n</string>
-    <string name="back_pressed"> I-Boblind is running. If you want to stop it, you should open the app and press the stop button </string>
+    <string name="stop">DETENER</string>
+    <string name="user_first_textView">Presione el boton para iniciar la deteccion de I_beacons.</string>
+    <string name="user_first_text">Presione el boton para detener el servicio de deteción de I_beacons</string>
+    <string name="can_detect_Ibeacon">SERVICIO DE DETECION DE I-BEACON INICIALIZADO EN SEGUNDO PLANO.</string>
+    <string name="service_stopped"> DETENER SERVICIO </string>
+    <string name="user_second_textView">Puede avandonar la aplicación sin que el servicio se detenga, continuara reciviendo notificaciones de la presencia de i_beacons cercanos a ustes.</string>
+    <string name="stopping"> Parando el servicio,Bluetooth esta apagado </string>
+    <string name="turn_on_Bluetooth"> Por favor, encienda su Bluetooth</string>
+    <string name="can_not_detect_Ibeacon"> NO SE PUEDE DETECTAR I-BEACONS </string>
+    <string name="Out_Of">  salistes de  </string>
+    <string name="approach_to"> acencandote a </string>
+    <string name="move_away_to"> alejandote de </string>
+    <string name="close_up"> Estas muy cerca de </string>
+    <string name="stop_service"> PARAR SERVICIO\n\n\n\n\n\n\nPARAR SERVICIO\n\n\n\n </string>
+    <string name="installer_mode"> Cambiar a modo instalador </string>
+    <string name="start_service"> INICIAR SERVICIO\n\n\n\n\n\n\nINICIAR SERVICIO\n\n\n\n</string>
+    <string name="back_pressed"> I-Boblind en ejecución. Si desea detenerlo, deve de abrir la aplicación y presionar sobre el botón de PARA SERVICIO </string>
     <!-- settings -->
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Configuraciones</string>
     <string name="pref_header_general">General</string>
-    <string name="pref_work_mode"> SELECT WORK MODE</string>
+    <string name="pref_work_mode"> MODO DE TRABAJO: </string>
 
     <string-array name="pref_work_mode_list_titles">
-        <item>Installer</item>
-        <item>User</item>
+        <item>Instalador</item>
+        <item>Usuario</item>
     </string-array>
     <string-array name="pref_work_mode_list_values">
         <item>1</item>
@@ -110,7 +115,7 @@
         <item>1</item>
         <item>0</item>
     </string-array>-->
-    <string name="pref_server">SERVER ADREES:</string>
+    <string name="pref_server">url:port DEL SERVIDOR REMOTO NGSI10:</string>
     <string name="title_activity_main_activity2">MainActivity2</string>
 
     <string name="pref_get_url">WRITES GET URL:</string>
