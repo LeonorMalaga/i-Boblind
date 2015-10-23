@@ -524,14 +524,12 @@ public class HTTP_JSON_POST extends AsyncTask<String,Void,String>{
     }
     private void sendtoSpeechBluService(String message){
         //Log.i("HTTP_JSON_POST /\n SENDtoSpeechBluService , ¿es? rssi>=coberageAlert -->                    ", this.rssi+" >"+this.coberageAlert);
-        double valanz=this.coberageAlert-2;
         if(message.equals("Not found") && !this.address.equals("0")){
             Intent intent = new Intent(Constants.BLACKDEVICE);
             intent.putExtra("address", this.address);
             LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
 
-        }else
-        if(this.rssi>=valanz){
+        }else{
         int device_id=mDevice.get_id();
 //        if(message==null){message=" ";}
 //        Intent intent = new Intent(Constants.DEVICE_MESSAGE);
@@ -549,10 +547,8 @@ public class HTTP_JSON_POST extends AsyncTask<String,Void,String>{
                 intent.putExtra("address", this.address);
                 LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent);
                 //Log.i("-----------INTENT DEVICE Was SEND-------------", String.valueOf(mDevice.get_id()));
-        }else{
+        }
        Intent intent2 = new Intent(Constants.SERVICE_UNKNOWN_STATE);
-       LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent2);}
-
+       LocalBroadcastManager.getInstance(context).sendBroadcastSync(intent2);
     }
-
 }

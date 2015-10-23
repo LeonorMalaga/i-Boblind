@@ -18,10 +18,10 @@ public class Deviceaux {
     private double dBmRSSI;
     private boolean okaRssi;
     private boolean okaRssiOld;
-
-    private int length=8;
+    private boolean firstime;
+    private int length=10;
     private double[] aRssi;
-   // private double[] aRssiOld={0,0,0};
+    private int[] tendence={0,0,0,0,0};
     private String address;
     private String text;
 
@@ -38,8 +38,9 @@ public class Deviceaux {
         this.okaRssiOld=false;
         this.aRssi=new double[length];
         this.push(rssi);
-        this.diferTime=3;
+        this.diferTime=4;
         this.last_update=System.currentTimeMillis();
+        this.firstime=true;
     }
     public Deviceaux(double rssi, String address) {
         this.address = address;
@@ -54,8 +55,9 @@ public class Deviceaux {
         this.okaRssiOld=false;
         aRssi=new double[length];
         push(rssi);
-        this.diferTime=3;
+        this.diferTime=4;
         this.last_update=System.currentTimeMillis();
+        this.firstime=true;
     }
     public Deviceaux(double rssi, String address,int diferTime) {
         this.address = address;
@@ -72,6 +74,7 @@ public class Deviceaux {
         push(rssi);
         this.diferTime=diferTime;
         this.last_update=System.currentTimeMillis();
+        this.firstime=true;
     }
    public Deviceaux(String address) {
         this.address = address;
@@ -86,6 +89,7 @@ public class Deviceaux {
         this.text = "leonormartinezmesas@gmail";
         this.diferTime=4;
        this.last_update=System.currentTimeMillis();
+       this.firstime=true;
     }
 
   public Deviceaux(String address,String text) {
@@ -99,8 +103,9 @@ public class Deviceaux {
         this.dBmRSSI = -85.0;
         this.outOfRegion = -85.0;
         this.text = "leonormartinezmesas@gmail";
-        this.diferTime=3;
+        this.diferTime=4;
       this.last_update=System.currentTimeMillis();
+      this.firstime=true;
     }
    public Deviceaux(Device device,Double rssi) {
         this.address = device.getmDeviceAddress();
@@ -115,8 +120,9 @@ public class Deviceaux {
         this.a = 0;
         aRssi=new double[length];
         push(rssi);
-        this.diferTime=3;
+        this.diferTime=4;
        this.last_update=System.currentTimeMillis();
+       this.firstime=true;
     }
   public Deviceaux(String address,int maxRssi, String deviceSpecification,int rssi) {
         this.address = address;
@@ -131,8 +137,9 @@ public class Deviceaux {
         this.a = 0;
         aRssi=new double[length];
         push(rssi);
-        this.diferTime=3;
+        this.diferTime=4;
       this.last_update=System.currentTimeMillis();
+      this.firstime=true;
     }
     public Deviceaux(String address,int maxRssi, String deviceSpecification,int rssi, int diferTime) {
         this.address = address;
@@ -149,6 +156,7 @@ public class Deviceaux {
         push(rssi);
         this.diferTime=diferTime;
         this.last_update=System.currentTimeMillis();
+        if(rssi>maxRssi){this.firstime=false;}else{this.firstime=true;}
     }
     public int getClose() {
         return close;
@@ -187,6 +195,14 @@ public class Deviceaux {
         this.text = text;
     }
 
+    public void setLast_update(long last_update) {
+        this.last_update = last_update;
+    }
+
+    public long getLast_update() {
+        return last_update;
+    }
+
     public double getdBmRSSI() {
         return dBmRSSI;
     }
@@ -196,12 +212,42 @@ public class Deviceaux {
         push(rssi);
     }
 
+    public void setFirstime(boolean firstime) {
+        this.firstime = firstime;
+    }
+
+    public boolean isFirstime() {
+        return firstime;
+    }
+
     public double getOutOfRegion() {
         return outOfRegion;
     }
 
     public void setOutOfRegion(double outOfRegion) {
         this.outOfRegion = outOfRegion;
+    }
+    public void pushTendence(int value) {
+        try {
+            if(value!=0.0f){
+                    for (int i = (length - 1); i >0; i--) {
+                        //Log.d("----------------PUSH------------   in 0  ", value+"  in i= "+i+"moving r[i-1]= "+aRssi[i-1]);
+                        double aux = aRssi[i - 1];
+                        aRssi[i] = aux;
+                    }
+                }
+                tendence[0] = value;
+        }catch(NullPointerException e){
+            Log.e("DEVICEAUX PUSK", "NULL POINT EXCEPTION"+e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+    public int tendence(){
+        int sum=0;
+        for(int i=0; i<tendence.length;i++){
+            sum=sum+tendence[i];
+        }
+        return sum;
     }
 
     private void push(double value) {
@@ -228,28 +274,28 @@ public class Deviceaux {
     }
 
     public double average() {
-        double auxm=length/2;
-        int m=(int)auxm;
         double d = 0;
         double sum = 0;
         double result=0f;
         if(okaRssi){
+        double auxm=(length/2)-2;
+        int m=(int)auxm;
         for (int i = 0; i< m; i++) {
             sum = sum + aRssi[i];
             if(aRssi[i]!=0.0f){
             d++;}
         }
         result = sum/d;}
-        Log.d("Average", "SUM= "+sum+"/ por d= "+d+" result= "+result);
+        //Log.d("AverageNEW", "SUM= "+sum+"/ por d= "+d+" result= "+result);
         return result;
     }
     public double oldAverage() {
-        double auxm=length/2;
-        int m=(int)auxm;
         double d = 0;
         double sum = 0;
         double result=0f;
         if(okaRssiOld){
+            double auxm=(length/2)+2;
+            int m=(int)auxm;
             for (int i = m; i< length; i++) {
                 sum = sum + aRssi[i];
 
@@ -257,7 +303,7 @@ public class Deviceaux {
                     d++;}
             }
             result = sum/d;}
-        Log.d("Average", "SUM= "+sum+"/ por d= "+d+" result= "+result);
+        //Log.d("AverageOLD", "SUM= "+sum+"/ por d= "+d+" result= "+result);
         return result;
     }
     public boolean RangeOfTime(){
@@ -265,9 +311,10 @@ public class Deviceaux {
         long currentime=System.currentTimeMillis();
         long difer=currentime-last_update;
         if(difer>(diferTime*1000)){
-        last_update=currentime;
         result=true;
         }
+            Log.d("  ----DEVICEAUX RANGE OFF TIME-----"+result+"----for device--:  ",address+" difer= "+difer+" < "+(diferTime*1000));
+
         return result;
     }
     public double difer(){
@@ -276,7 +323,9 @@ public class Deviceaux {
             double aux=average();
             double Oldaux=oldAverage();
             result=aux-Oldaux;
+            Log.d("Average for : ", address+"  is NewAverage " + aux+" - OldAverage  " +Oldaux);
         }
+        Log.d("Average for : ", address+"is  = "+result);
         return result;
     }
     @Override
