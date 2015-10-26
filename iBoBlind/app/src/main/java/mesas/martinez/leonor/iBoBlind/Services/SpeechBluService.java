@@ -267,6 +267,7 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
     }
 
     protected void speakTheText(String Text) {
+        accelerometer.setTime_sensitivity(Text);
         accelerometer.setLast_movement(System.currentTimeMillis());
         Log.v("--SPEAKtheTEXT---", Text);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -605,6 +606,7 @@ private boolean isBlackDevice(String Adrees){
         Log.d("OnLeScan", message);
         double limitRegion = mDevicesArray.get(index).getOutOfRegion();
         String speak = mDevicesArray.get(index).getText();
+        int length=speak.length();
         if(mDevicesArray.get(index).isFirstime()){
             message = "----No show it again. FirsTime = true----" + address+ " limitRegion = "+(limitRegion+2d);
             Log.d("OnLeScan", message);
@@ -646,13 +648,19 @@ private boolean isBlackDevice(String Adrees){
         if (r) {
                if ( average > -56 && average !=0) {
                    if(mDevicesArray.get(index).getCount()<2){
+                    mDevicesArray.get(index).plusTwoCount();
+
+                   if(length < 100){
                    String Text = getResources().getString(R.string.close_up);
                    speak = Text +" "+  speak;
+                   }else{
+                       mDevicesArray.get(index).setDiferTime(Math.abs(length/6));
+                       mDevicesArray.get(index).setCounttocero();
+                   }
                    SpeechBluService.this.speakTheText(speak);
-                   mDevicesArray.get(index).plusOneCount();
                    mDevicesArray.get(index).setLast_update(System.currentTimeMillis());
                    tdifer=true;}
-               } else if ((difer < -diferAverage) && (tendence < 0)) {
+               } else if ((difer < -diferAverage) && (tendence < 0) && (length < 100)) {
                     //move away
                     //Out off range?
                     //int b = new Double(dBmRSSI).compareTo(new Double(limitRegion - ajustOutOffRange));
@@ -678,7 +686,7 @@ private boolean isBlackDevice(String Adrees){
                     }
                 } else {
                     //approach
-                    if ((difer > diferAverage) && (tendence > 0)) {
+                    if ((difer > diferAverage) && (tendence > 0) && (length < 100)) {
                         Log.d("SPEECHBLUSERVICE SpeakupdatedeviceAUX", "----" + address+"--rssi: "+rssi+"--RangeOfTime----TRUE---difer---=" + difer +" > "+diferAverage+" --Aproach--" );
                         String Text = getResources().getString(R.string.approach_to);
                         speak = Text +" "+speak;
@@ -757,8 +765,8 @@ private boolean isBlackDevice(String Adrees){
         private float prevX = 0, prevY = 0, prevZ = 0;
         private float curX = 0, curY = 0, curZ = 0;
         private float movement;
-        //protected int MIN_TIME_SENSIVILITI = 100000000;
-        protected long time_sensitivity= 1500000000l;
+        protected long MIN_TIME_SENSIVILITI = 1000000000;
+        protected long time_sensitivity=1500000000l;
         private float min_movement = 0.7f;
         private float mMovement = 0;
         //float base_movement = 1E-6f;
@@ -785,6 +793,12 @@ private boolean isBlackDevice(String Adrees){
         int a = 0;
         public long getTime_sensitivity() {
             return time_sensitivity;
+        }
+        public void setTime_sensitivity(String message){
+            int length=message.length();
+            //the spech to text speack 14 syllable per seconds
+            time_sensitivity=(length/12)*MIN_TIME_SENSIVILITI;
+            Log.d("Set Time sensitivity","--Time---=length: "+length+"* 100000000/12--------- = "+time_sensitivity+" ms------------");
         }
 
         public void setLast_movement(long last_movement) {

@@ -175,8 +175,8 @@ public class Deviceaux {
         count=0;
     }
 
-    public void plusOneCount() {
-        count++;
+    public void plusTwoCount() {
+        count=count+2;
     }
     public void minusOneCount() {
         if(count>1){count--;}else{count=0;}
@@ -193,6 +193,10 @@ public class Deviceaux {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public void setDiferTime(int diferTime) {
+        this.diferTime = diferTime;
     }
 
     public void setLast_update(long last_update) {
