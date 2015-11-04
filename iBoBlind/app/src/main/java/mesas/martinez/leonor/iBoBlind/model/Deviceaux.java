@@ -19,9 +19,9 @@ public class Deviceaux {
     private boolean okaRssi;
     private boolean okaRssiOld;
     private boolean firstime;
-    private int length=10;
+    private int length=10;//min length 4
     private double[] aRssi;
-    private int[] tendence={0,0,0,0,0};
+    private int[] tendence={0,0,0,0,0,0,0,0,0,0};
     private String address;
     private String text;
 
@@ -255,24 +255,87 @@ public class Deviceaux {
     }
 
     private void push(double value) {
-        double auxm=length/2;
-        int m=(int)auxm;
+        int auxm=(int)(length/4);
+        int m=(int)auxm*2;
+        int n=(int)auxm*3;
+
         //Log.d("---------------PUSH---------------    ","    Mitad array=    "+m);
         try {
+
             if(value!=0.0f){
-            if (a >0) {
-                for (int i = (length - 1); i >0; i--) {
-                    //Log.d("----------------PUSH------------   in 0  ", value+"  in i= "+i+"moving r[i-1]= "+aRssi[i-1]);
-                    double aux = aRssi[i - 1];
-                    aRssi[i] = aux;
+                if((length<5) || a > (length-1)){
+                    if (a > 0) {
+                        for (int i = (length - 1); i > 0; i--) {
+                            //Log.d("----------------PUSH------------   in 0  ", value+"  in i= "+i+"moving r[i-1]= "+aRssi[i-1]);
+                            double aux = aRssi[i - 1];
+                            aRssi[i] = aux;
+                        }
+
+                    }
+                    aRssi[0] = value;
+                    a++;
+                    if(a>m){okaRssi=true;}
+                    if(a>aRssi.length){okaRssiOld=true;}
+                }else{
+                    double aux;
+                switch(a) {
+                    case (0):
+                        for (int i =0; i > length; i++) {
+                            aRssi[i]=value;
+                        }
+                    break;
+                    case(1):
+                        for (int i =0; i > auxm; i++) {
+                            aRssi[i]=value;
+                        }
+                        okaRssi=true;
+                    break;
+                    case(2):
+                        aux = aRssi[auxm];
+                        for (int i =auxm; i > n; i++) {
+                            aRssi[i]=aux;
+                        }
+                        for (int i =0; i > auxm; i++) {
+                            aRssi[i]=value;
+                        }
+                        okaRssiOld=true;
+                        break;
+                    case(3):
+                        aux = aRssi[auxm];
+                        for (int i =auxm; i > m; i++) {
+                            aRssi[i]=aux;
+                        }
+                        for (int i =0; i > auxm; i++) {
+                            aRssi[i]=value;
+                        }
+                        okaRssiOld=true;
+                        break;
+                    default:
+                        int old=(int)(length/a);
+                        int p=(int)(length/(a+1));
+                        int init=(int)(length-p);
+                        int fin=(int)length;
+                        for(int k=0;k<(a+1);k++){
+
+                            if(k==(a)){
+                              aux=value;
+                            }else{
+                               aux=aRssi[(length-1-(old*k))];
+                            }
+                            for(int j=init;j<fin;j++){
+                                aRssi[j]=aux;
+                            }
+                            fin=init;
+                            init=fin-p;
+                        }
+                    break;
                 }
-            }
-                aRssi[0] = value;
-            a++;
-            if(a>m){okaRssi=true;}
-            if(a>aRssi.length){okaRssiOld=true;}}
+                   a++;
+
+                }
+}
         }catch(NullPointerException e){
-            Log.e("DEVICEAUX PUSK", "NULL POINT EXCEPTION"+e.getLocalizedMessage());
+            Log.e("DEVICEAUX PUSH", "NULL POINT EXCEPTION"+e.getLocalizedMessage());
             e.printStackTrace();
         }
     }
@@ -282,7 +345,7 @@ public class Deviceaux {
         double sum = 0;
         double result=0f;
         if(okaRssi){
-        double auxm=(length/2)-2;
+        double auxm=(length/2)-1;
         int m=(int)auxm;
         for (int i = 0; i< m; i++) {
             sum = sum + aRssi[i];
@@ -298,7 +361,7 @@ public class Deviceaux {
         double sum = 0;
         double result=0f;
         if(okaRssiOld){
-            double auxm=(length/2)+2;
+            double auxm=(length/2)+1;
             int m=(int)auxm;
             for (int i = m; i< length; i++) {
                 sum = sum + aRssi[i];

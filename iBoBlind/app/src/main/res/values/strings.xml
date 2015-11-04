@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">i-BoBlind</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Balizas</string>
+    <string name="hello_world">Balizas</string>
     <string name="action_settings">Configuración</string>
     <!-- LAYOUT -->
     <!-- comunication-->

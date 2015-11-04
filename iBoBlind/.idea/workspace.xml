@@ -14,6 +14,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="OnDeviceDetected Acelerometer Movement" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: mesas.martinez.leonor.tracbursys" />
   </component>
   <component name="ChangeListManager">
@@ -52,21 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="User_Activity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Activitys/User_Activity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2910" max-vertical-offset="5385">
-              <caret line="194" column="20" selection-start-line="192" selection-start-column="0" selection-end-line="198" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Installer_Activity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Activitys/Installer_Activity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1521" max-vertical-offset="6870">
-              <caret line="130" column="55" selection-start-line="130" selection-start-column="55" selection-end-line="130" selection-end-column="55" />
+            <state vertical-scroll-proportion="-5.148148" vertical-offset="2591" max-vertical-offset="6870">
+              <caret line="190" column="24" selection-start-line="190" selection-start-column="24" selection-end-line="191" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -87,9 +78,18 @@
       <file leaf-file-name="SpeechBluService.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Services/SpeechBluService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.10570071" vertical-offset="16" max-vertical-offset="14640">
-              <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
-              <folding />
+            <state vertical-scroll-proportion="0.90771174" vertical-offset="8912" max-vertical-offset="15165">
+              <caret line="699" column="92" selection-start-line="699" selection-start-column="92" selection-end-line="699" selection-end-column="92" />
+              <folding>
+                <element signature="e#11610#15346#0" expanded="true" />
+                <element signature="e#15339#15340#0" expanded="true" />
+                <element signature="e#35296#35297#0" expanded="true" />
+                <element signature="e#35328#35329#0" expanded="true" />
+                <element signature="e#35359#35360#0" expanded="true" />
+                <element signature="e#35391#35392#0" expanded="true" />
+                <element signature="e#35422#35423#0" expanded="true" />
+                <element signature="e#35454#35455#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -97,11 +97,11 @@
       <file leaf-file-name="Deviceaux.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/model/Deviceaux.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-155.18518" vertical-offset="40" max-vertical-offset="4710">
-              <caret line="316" column="27" selection-start-line="316" selection-start-column="18" selection-end-line="316" selection-end-column="27" />
+            <state vertical-scroll-proportion="83.888885" vertical-offset="2610" max-vertical-offset="5655">
+              <caret line="23" column="47" selection-start-line="23" selection-start-column="47" selection-end-line="23" selection-end-column="47" />
               <folding>
-                <element signature="e#5577#5578#0" expanded="true" />
-                <element signature="e#5619#5620#0" expanded="true" />
+                <element signature="e#5601#5602#0" expanded="true" />
+                <element signature="e#5643#5644#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -130,9 +130,21 @@
       <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1245" max-vertical-offset="2115">
-              <caret line="117" column="66" selection-start-line="117" selection-start-column="66" selection-end-line="117" selection-end-column="66" />
+            <state vertical-scroll-proportion="-1.8" vertical-offset="0" max-vertical-offset="2115">
+              <caret line="3" column="35" selection-start-line="3" selection-start-column="35" selection-end-line="3" selection-end-column="35" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="960">
+              <caret line="27" column="26" selection-start-line="27" selection-start-column="26" selection-end-line="27" selection-end-column="26" />
+              <folding>
+                <element signature="e#1380#1398#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -730,18 +742,18 @@
         <option value="$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Activitys/SettingsActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_installer_old.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_installer.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Activitys/Installer_Activity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/model/Deviceaux.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Services/SpeechBluService.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="497" />
-    <option name="y" value="73" />
-    <option name="width" value="936" />
-    <option name="height" value="1054" />
+    <option name="x" value="1300" />
+    <option name="y" value="71" />
+    <option name="width" value="584" />
+    <option name="height" value="1105" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -1341,7 +1353,7 @@
     </task>
     <servers />
   </component>
-  <component name="TodoView" selected-index="1">
+  <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
       <are-packages-shown value="false" />
       <are-modules-shown value="false" />
@@ -1362,14 +1374,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="497" y="73" width="936" height="1054" extended-state="0" />
-    <editor active="true" />
+    <frame x="1300" y="71" width="584" height="1105" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47709164" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4124031" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.990099" sideWeight="0.6916566" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26569507" sideWeight="0.5413534" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Build Variants" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.59074074" sideWeight="0.52797204" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37413624" sideWeight="0.18333334" order="7" side_tool="true" content_ui="tabs" />
@@ -1378,13 +1390,13 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.7709773" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297244" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="1.0" sideWeight="0.81666666" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.10625" sideWeight="0.81666666" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2679372" sideWeight="0.4573935" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.07445652" sideWeight="0.49448818" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.66900176" sideWeight="0.83206934" order="14" side_tool="true" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24607623" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.59074074" sideWeight="0.47086248" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44760936" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1476,11 +1488,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="222" max-vertical-offset="900">
           <caret line="3" column="42" selection-start-line="3" selection-start-column="42" selection-end-line="3" selection-end-column="42" />
           <folding>
-            <element signature="e#1218#1236#0" expanded="true" />
             <element signature="e#1380#1398#0" expanded="true" />
-            <element signature="e#1508#1526#0" expanded="true" />
-            <element signature="e#1915#1933#0" expanded="true" />
-            <element signature="e#2105#2138#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1539,11 +1547,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="261" max-vertical-offset="900">
           <caret line="3" column="42" selection-start-line="3" selection-start-column="42" selection-end-line="3" selection-end-column="42" />
           <folding>
-            <element signature="e#1218#1236#0" expanded="true" />
             <element signature="e#1380#1398#0" expanded="true" />
-            <element signature="e#1508#1526#0" expanded="true" />
-            <element signature="e#1915#1933#0" expanded="true" />
-            <element signature="e#2105#2138#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1638,11 +1642,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#1218#1236#0" expanded="true" />
             <element signature="e#1380#1398#0" expanded="true" />
-            <element signature="e#1508#1526#0" expanded="true" />
-            <element signature="e#1915#1933#0" expanded="true" />
-            <element signature="e#2105#2138#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1733,20 +1733,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1440">
           <caret line="25" column="14" selection-start-line="25" selection-start-column="3" selection-end-line="25" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="960">
-          <caret line="18" column="59" selection-start-line="18" selection-start-column="59" selection-end-line="18" selection-end-column="59" />
-          <folding>
-            <element signature="e#1218#1236#0" expanded="true" />
-            <element signature="e#1380#1398#0" expanded="true" />
-            <element signature="e#1508#1526#0" expanded="true" />
-            <element signature="e#1915#1933#0" expanded="true" />
-            <element signature="e#2105#2138#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1861,24 +1848,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1245" max-vertical-offset="2115">
-          <caret line="117" column="66" selection-start-line="117" selection-start-column="66" selection-end-line="117" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Activitys/Installer_Activity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1521" max-vertical-offset="6870">
-          <caret line="130" column="55" selection-start-line="130" selection-start-column="55" selection-end-line="130" selection-end-column="55" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/comunication/GETPOSTIntentService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2460">
@@ -1887,22 +1856,59 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Activitys/Installer_Activity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-5.148148" vertical-offset="2591" max-vertical-offset="6870">
+          <caret line="190" column="24" selection-start-line="190" selection-start-column="24" selection-end-line="191" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="960">
+          <caret line="27" column="26" selection-start-line="27" selection-start-column="26" selection-end-line="27" selection-end-column="26" />
+          <folding>
+            <element signature="e#1380#1398#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.8" vertical-offset="0" max-vertical-offset="2115">
+          <caret line="3" column="35" selection-start-line="3" selection-start-column="35" selection-end-line="3" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/model/Deviceaux.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-155.18518" vertical-offset="40" max-vertical-offset="4710">
-          <caret line="316" column="27" selection-start-line="316" selection-start-column="18" selection-end-line="316" selection-end-column="27" />
+        <state vertical-scroll-proportion="83.888885" vertical-offset="2610" max-vertical-offset="5655">
+          <caret line="23" column="47" selection-start-line="23" selection-start-column="47" selection-end-line="23" selection-end-column="47" />
           <folding>
-            <element signature="e#5577#5578#0" expanded="true" />
-            <element signature="e#5619#5620#0" expanded="true" />
+            <element signature="e#5601#5602#0" expanded="true" />
+            <element signature="e#5643#5644#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mesas/martinez/leonor/iBoBlind/Services/SpeechBluService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.10570071" vertical-offset="16" max-vertical-offset="14640">
-          <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
-          <folding />
+        <state vertical-scroll-proportion="0.90771174" vertical-offset="8912" max-vertical-offset="15165">
+          <caret line="699" column="92" selection-start-line="699" selection-start-column="92" selection-end-line="699" selection-end-column="92" />
+          <folding>
+            <element signature="e#11610#15346#0" expanded="true" />
+            <element signature="e#15339#15340#0" expanded="true" />
+            <element signature="e#35296#35297#0" expanded="true" />
+            <element signature="e#35328#35329#0" expanded="true" />
+            <element signature="e#35359#35360#0" expanded="true" />
+            <element signature="e#35391#35392#0" expanded="true" />
+            <element signature="e#35422#35423#0" expanded="true" />
+            <element signature="e#35454#35455#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
