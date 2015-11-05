@@ -479,23 +479,23 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
         string_rssi = String.valueOf(rssi);
         device_name = device.getName();
             //For documentation
-            float M=accelerometer.getmMovement();
-            float X=accelerometer.getX();
-            float Y=accelerometer.getY();
-            float Z=accelerometer.getZ();
-            gps = new GPSservice(getApplicationContext());
-            String mlatitude="0";
-            String mlongitude="0";
-            // check if GPS enabled
-            if (gps.canGetLocation()) {
-                double latitude = gps.getLatitude();
-                double longitude = gps.getLongitude();
-                Log.d("--LocationOk---", "---");
-               mlatitude = String.valueOf(latitude);
-               mlongitude = String.valueOf(longitude);
-            }
+//            float M=accelerometer.getmMovement();
+//            float X=accelerometer.getX();
+//            float Y=accelerometer.getY();
+//            float Z=accelerometer.getZ();
+//            gps = new GPSservice(getApplicationContext());
+//            String mlatitude="0";
+//            String mlongitude="0";
+//            // check if GPS enabled
+//            if (gps.canGetLocation()) {
+//                double latitude = gps.getLatitude();
+//                double longitude = gps.getLongitude();
+//                Log.d("--LocationOk---", "---");
+//               mlatitude = String.valueOf(latitude);
+//               mlongitude = String.valueOf(longitude);
+//            }
             //
-        Log.d("OnDeviceDetected Acelerometer Movement M=",M+", X="+X+",Y="+Y+",Z="+Z+",GPS latitude="+mlatitude+", longitude="+mlongitude+", device="+ address + ", name=" + device_name + ", rssi=" + string_rssi);
+       // Log.d("OnDeviceDetected Acelerometer Movement M=",M+", X="+X+",Y="+Y+",Z="+Z+",GPS latitude="+mlatitude+", longitude="+mlongitude+", device="+ address + ", name=" + device_name + ", rssi=" + string_rssi);
         Deviceaux auxdevice = new Deviceaux(rssi, address);
         int index=mDevicesArray.indexOf(auxdevice);
         if(index!=-1){
@@ -628,6 +628,21 @@ private boolean isBlackDevice(String Adrees){
         double limitRegion = mDevicesArray.get(index).getOutOfRegion();
         String speak = mDevicesArray.get(index).getText();
         int length=speak.length();
+        double lastRSSI =mDevicesArray.get(index).getdBmRSSI();
+        //---------Update deviceaux-----------//
+        mDevicesArray.get(index).setdBmRSSI(rssi);
+        double auxdifer=rssi-lastRSSI;
+        if(auxdifer>20){ mDevicesArray.get(index).pushTendence(2);
+        }else if(auxdifer<-20){
+            mDevicesArray.get(index).pushTendence(-2);
+        }else if(auxdifer>0){//tendence to aproach
+            mDevicesArray.get(index).pushTendence(1);
+        }else if(auxdifer < 0){//tendence to move away
+            mDevicesArray.get(index).pushTendence(-1);
+        }else{
+            mDevicesArray.get(index).pushTendence(0);
+        }
+        //------------------------------------//
         if(mDevicesArray.get(index).isFirstime()){
             //message = "----No show it again. FirsTime = true----" + address+ " limitRegion = "+(limitRegion+2d);
             //Log.d("OnLeScan", message);
@@ -635,19 +650,7 @@ private boolean isBlackDevice(String Adrees){
                 SpeechBluService.this.speakTheText(speak);
             mDevicesArray.get(index).setFirstime(false);}
         }else{
-        double lastRSSI =mDevicesArray.get(index).getdBmRSSI();
-        mDevicesArray.get(index).setdBmRSSI(rssi);
-        double auxdifer=rssi-lastRSSI;
-            if(auxdifer>20){ mDevicesArray.get(index).pushTendence(2);
-            }else if(auxdifer<-20){
-                mDevicesArray.get(index).pushTendence(-2);
-            }else if(auxdifer>0){//tendence to aproach
-                mDevicesArray.get(index).pushTendence(1);
-            }else if(auxdifer < 0){//tendence to move away
-                mDevicesArray.get(index).pushTendence(-1);
-            }else{
-                mDevicesArray.get(index).pushTendence(0);
-            }
+
 
         if(mDevicesArray.get(index).RangeOfTime()){
         //setMovementAtributes();
@@ -724,60 +727,6 @@ private boolean isBlackDevice(String Adrees){
     }
 
     //---------------To now is there is there are movement --------------//
-
-    class Rotation implements SensorEventListener {
-        private long current_time;
-        float[] orientation = new float[3];
-        float[] rMat = new float[9];
-        private SensorManager smr;
-        private List<Sensor> sensors;
-        private int mAzimuth = 0;
-        private boolean mdo = false;
-
-        Rotation() {
-            smr = (SensorManager) getSystemService(SENSOR_SERVICE);
-            sensors = smr.getSensorList(Sensor.TYPE_ROTATION_VECTOR);
-
-        }
-
-        public void start() {
-            Log.d("--Rotation start--", "CALL");
-            if (sensors.size() > 0) {
-                //5 muestras por segun-do
-
-                mdo = smr.registerListener(this, sensors.get(0), SensorManager.SENSOR_DELAY_GAME);
-                Log.d("Rotation registerListener---", String.valueOf(mdo));
-            }
-        }
-
-        public void stop() {
-            if (mdo) {
-                try {
-                    smr.unregisterListener(this, sensors.get(0));
-                } catch (IndexOutOfBoundsException e) {
-                    Log.e("Rotation Index OutOfBoundException", e.getStackTrace().toString());
-                }
-            }
-            ;
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            synchronized (this) {
-                current_time = event.timestamp;
-                smr.getRotationMatrixFromVector(rMat, event.values);
-                mAzimuth = (int) (Math.toDegrees(smr.getOrientation(rMat, orientation)[0]) + 360) % 360;
-                String message = "*Rotation---Time:" + current_time + " msg, mAzimuth= " + mAzimuth + "--------------";
-                Log.d("OnSensorChange", message);
-                //writeFile(message);
-            }
-        }
-    }
 
     class Accelerometer implements SensorEventListener {
 
