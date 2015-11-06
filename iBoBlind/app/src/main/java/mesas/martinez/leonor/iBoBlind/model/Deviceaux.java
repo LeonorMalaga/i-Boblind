@@ -39,7 +39,7 @@ public class Deviceaux {
         this.aRssi=new double[length];
         this.push(rssi);
         this.diferTime=4;
-        this.last_update=System.currentTimeMillis();
+        this.last_update=0;
         this.firstime=true;
     }
     public Deviceaux(double rssi, String address) {
@@ -56,7 +56,7 @@ public class Deviceaux {
         aRssi=new double[length];
         push(rssi);
         this.diferTime=4;
-        this.last_update=System.currentTimeMillis();
+        this.last_update=0;
         this.firstime=true;
     }
     public Deviceaux(double rssi, String address,int diferTime) {
@@ -73,7 +73,7 @@ public class Deviceaux {
         aRssi=new double[length];
         push(rssi);
         this.diferTime=diferTime;
-        this.last_update=System.currentTimeMillis();
+        this.last_update=0;
         this.firstime=true;
     }
    public Deviceaux(String address) {
@@ -88,7 +88,7 @@ public class Deviceaux {
         this.outOfRegion = -85.0;
         this.text = "leonormartinezmesas@gmail";
         this.diferTime=4;
-       this.last_update=System.currentTimeMillis();
+       this.last_update=0;
        this.firstime=true;
     }
 
@@ -104,7 +104,7 @@ public class Deviceaux {
         this.outOfRegion = -85.0;
         this.text = "leonormartinezmesas@gmail";
         this.diferTime=4;
-      this.last_update=System.currentTimeMillis();
+      this.last_update=0;
       this.firstime=true;
     }
    public Deviceaux(Device device,Double rssi) {
@@ -121,7 +121,7 @@ public class Deviceaux {
         aRssi=new double[length];
         push(rssi);
         this.diferTime=4;
-       this.last_update=System.currentTimeMillis();
+       this.last_update=0;
        this.firstime=true;
     }
   public Deviceaux(String address,int maxRssi, String deviceSpecification,int rssi) {
@@ -138,7 +138,7 @@ public class Deviceaux {
         aRssi=new double[length];
         push(rssi);
         this.diferTime=4;
-      this.last_update=System.currentTimeMillis();
+      this.last_update=0;
       this.firstime=true;
     }
     public Deviceaux(String address,int maxRssi, String deviceSpecification,int rssi, int diferTime) {
@@ -155,7 +155,7 @@ public class Deviceaux {
         aRssi=new double[length];
         push(rssi);
         this.diferTime=diferTime;
-        this.last_update=System.currentTimeMillis();
+        this.last_update=0;
         if(rssi>maxRssi){this.firstime=false;}else{this.firstime=true;}
     }
     public int getClose() {
@@ -218,6 +218,7 @@ public class Deviceaux {
 
     public void setFirstime(boolean firstime) {
         this.firstime = firstime;
+        this.last_update=System.currentTimeMillis();
     }
 
     public boolean isFirstime() {

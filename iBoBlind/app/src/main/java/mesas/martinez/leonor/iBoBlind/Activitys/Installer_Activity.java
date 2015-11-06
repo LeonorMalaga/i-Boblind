@@ -242,7 +242,6 @@ public class Installer_Activity extends ActionBarActivity implements AdapterView
                         //new HTTP_JSON_POST(getApplicationContext(),data_validation,HTTP_JSON_POST.Gender.UPDATE_CREATE,json).execute();
                         new HTTP_JSON_POST(getApplicationContext(),jsonManager,data_validation).execute();
 
-
                 }//onItemClick
             });
         }

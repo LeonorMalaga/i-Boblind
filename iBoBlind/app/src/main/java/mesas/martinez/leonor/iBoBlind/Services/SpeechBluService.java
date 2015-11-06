@@ -625,11 +625,17 @@ private boolean isBlackDevice(String Adrees){
     private void speakUpdateDeviceauxAgain(int index, int rssi) {
         String message = "----Detected device again----" + address + " rssi " + string_rssi+", Index= "+index;
         Log.d("OnLeScan", message);
+        //---------Update deviceaux-----------//
         double limitRegion = mDevicesArray.get(index).getOutOfRegion();
         String speak = mDevicesArray.get(index).getText();
         int length=speak.length();
+        mDevicesArray.get(index).setDiferTime(Math.abs(speak.length()/17));
         double lastRSSI =mDevicesArray.get(index).getdBmRSSI();
-        //---------Update deviceaux-----------//
+        double average=mDevicesArray.get(index).average();
+        double rssiAverage=rssi;
+        if(average!=0.0f){
+            rssiAverage=average;
+        }
         mDevicesArray.get(index).setdBmRSSI(rssi);
         double auxdifer=rssi-lastRSSI;
         if(auxdifer>20){ mDevicesArray.get(index).pushTendence(2);
@@ -646,77 +652,75 @@ private boolean isBlackDevice(String Adrees){
         if(mDevicesArray.get(index).isFirstime()){
             //message = "----No show it again. FirsTime = true----" + address+ " limitRegion = "+(limitRegion+2d);
             //Log.d("OnLeScan", message);
-            if(rssi > (limitRegion+1d)){
+            if(rssiAverage > (limitRegion+1d)){
                 SpeechBluService.this.speakTheText(speak);
             mDevicesArray.get(index).setFirstime(false);}
         }else{
-
 
         if(mDevicesArray.get(index).RangeOfTime()){
         //setMovementAtributes();
         String address = mDevicesArray.get(index).getAddress();
         double difer =mDevicesArray.get(index).difer();
         int diferAverage=0;
-
         if(difer==0.0f){
             difer=rssi-lastRSSI;
             diferAverage =diferAverage*2;
         }
-
-
         int tendence=mDevicesArray.get(index).tendence();
         boolean r = accelerometer.RangeOfTime();//wait 3
-        double average=mDevicesArray.get(index).average();
-
             Log.d("SPEECHBLUSERVICEAGAIN", "----" + address +", aceleromenter Range Of Time= "+r+", average= "+ average + ", rssi "+rssi+", limitOfReguion= "+limitRegion+", difer= "+ difer+ ",  diferAverage=" + diferAverage+", tendence="+tendence);
 // While the user is moving in the region , we calculate a mean of 3 updates before Indicate the movement.
 // when the user go out of the region. we say RegionOut message and it save state .
         if (r) {
-               if ( average > -56 && average !=0) {
+               if ((average > -56)) {
                    if(mDevicesArray.get(index).getCount()<1){
                     mDevicesArray.get(index).plusTwoCount();
-
-                   if(length < 100){
+                       //85--> 5 segundos
+                       //51--> 3 segundos
+                   if(length < 85){
                    String Text = getResources().getString(R.string.close_up);
                    speak = Text +" "+  speak;
+                   mDevicesArray.get(index).setDiferTime(Math.abs(speak.length()/17));
                    }else{
+                       length=length+51;
                        mDevicesArray.get(index).setDiferTime(Math.abs(length/17));
                        mDevicesArray.get(index).setCounttocero();
                    }
                    SpeechBluService.this.speakTheText(speak);
                    mDevicesArray.get(index).setLast_update(System.currentTimeMillis());
                   }
-               } else if ((difer < -diferAverage) && (tendence < 0) && (length < 100)) {
+               } else if ((difer < -diferAverage) && (tendence < 0) && (length < 85)) {
                     //move away
                     //Out off range?
                     //int b = new Double(dBmRSSI).compareTo(new Double(limitRegion - ajustOutOffRange));
                     //int b = new Double(average).compareTo(new Double(limitRegion));
                     Log.d("SPEECHBLUSERVICE SpeakupdatedeviceAUX Move away",  "----" + address +"--rssi: "+rssi+"--average---"+average+"---limitReguion--"+(limitRegion-1d)+"-- difer<-diferAverage---=" + difer +" < -"+diferAverage);
                     if ((average <(limitRegion-4d)) && (average !=0)&& mDevicesArray.get(index).getCount()<1) {
-                        mDevicesArray.get(index).setdBmRSSI(rssi);
                         String Text = getResources().getString(R.string.Out_Of);
                         speak = Text +" "+ speak;
-                        SpeechBluService.this.speakTheText(speak);
-                        //mDevicesArray.remove(index);
-                        //mDevicesArray.get(index).setFirstime(true);
                         mDevicesArray.get(index).plusTwoCount();
                         mDevicesArray.get(index).setLast_update(System.currentTimeMillis());
-                    } else {
+                        SpeechBluService.this.speakTheText(speak);
+                        mDevicesArray.get(index).setDiferTime(Math.abs(speak.length()/17));
+                        //mDevicesArray.remove(index);
+                        //mDevicesArray.get(index).setFirstime(true);
+                    } else if (average > (limitRegion)){
+
                         String Text = getResources().getString(R.string.move_away_to);
                         speak = Text +" "+  speak;
-                        SpeechBluService.this.speakTheText(speak);
                         mDevicesArray.get(index).minusOneCount();
                         mDevicesArray.get(index).setLast_update(System.currentTimeMillis());
+                        SpeechBluService.this.speakTheText(speak);
                     }
                 } else {
                     //approach
-                    if ((difer > diferAverage) && (tendence > 0) && (length < 100)) {
+                    if ((difer > diferAverage) && (tendence > 0) && (length < 85) && (average > (limitRegion))) {
                         Log.d("SPEECHBLUSERVICE SpeakupdatedeviceAUX Approach", "----" + address+"--rssi: "+rssi+"--average---"+average+"---difer > diferAverage---=" + difer +" > "+diferAverage );
                         String Text = getResources().getString(R.string.approach_to);
                         speak = Text +" "+speak;
-                        SpeechBluService.this.speakTheText(speak);
                         mDevicesArray.get(index).minusOneCount();
                         mDevicesArray.get(index).setLast_update(System.currentTimeMillis());
+                        SpeechBluService.this.speakTheText(speak);
                     }
                 }
                //Log.d("SPEECHBLUSERVICE SpeakupdatedeviceAUX",  " " + address+"--To Speak " + toSpeak );
