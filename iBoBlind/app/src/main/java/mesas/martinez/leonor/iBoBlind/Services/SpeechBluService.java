@@ -224,8 +224,14 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Toast.makeText(this, "This Language is not supported", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Ready to Speak", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Ready to Speak", Toast.LENGTH_SHORT).show();
                 ttsInit = true;
+                String Text = getResources().getString(R.string.iniciado);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ttsUnder21(Text);
+                } else {
+                    ttsUnder20(Text);
+                }
             }
         } else {
             Toast.makeText(this, "Can Not Speak", Toast.LENGTH_LONG).show();
@@ -238,6 +244,7 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
 
         HashMap<String, String> map = new HashMap<>();
         map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
+
         try{
         tts.speak(text, TextToSpeech.QUEUE_ADD, map);
     }catch(NullPointerException e){
@@ -292,23 +299,23 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
     }
 
     protected void mstop() {
-        Log.d("---STOP SERVICE--", " " + start);
 
+        Log.d("---STOP SERVICE--", " " + start);
         if (start != false) {
             start = false;
             mDevicesArray.clear();
             blackListArray.clear();
             mBluetoothAdapter.stopLeScan(SpeechBluService.this);
             this.setState(State.DISCONNECTING);
+            //Stop accelerometer
+            accelerometer.stop();
+            //rotate.stop();
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
             // Stop the TTS Engine when you do not require it
             if (!tts.equals(null)) {
                 tts.stop();
                 tts.shutdown();
             }
-            //Stop accelerometer
-            accelerometer.stop();
-            //rotate.stop();
-            LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
             this.stopSelf();//Stop service
             this.onDestroy();
         }
@@ -364,8 +371,24 @@ public class SpeechBluService extends IntentService implements BluetoothAdapter.
 
                     break;
                 case Constants.SERVICE_STOP:
-                    SpeechBluService.this.mstop();
                     Log.i("-----------INTENT received-------------", "---STOP SERVICE--");
+                    String Text = getResources().getString(R.string.speakStop);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        ttsUnder21(Text);
+                    } else {
+                        ttsUnder20(Text);
+                    }
+                    int ms=(Text.length()/12)*1000;
+
+                    synchronized (SpeechBluService.this) {
+                    try {
+                        SpeechBluService.this.wait(ms);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }}
+
+                    SpeechBluService.this.mstop();
+
                     break;
                 case Constants.SERVICE_WAIT_RESPONSE:
                     SpeechBluService.this.setState(State.WAIT_RESPONSE);
@@ -725,12 +748,11 @@ private boolean isBlackDevice(String Adrees){
                 }
                //Log.d("SPEECHBLUSERVICE SpeakupdatedeviceAUX",  " " + address+"--To Speak " + toSpeak );
 
-            }}//if Rage Of time OK
+        }}//if Rage Of time OK
 
     }//if firstTime
     }
-
-    //---------------To now is there is there are movement --------------//
+//---------------To now is there is there are movement --------------//
 
     class Accelerometer implements SensorEventListener {
 
@@ -771,7 +793,7 @@ private boolean isBlackDevice(String Adrees){
             int length=message.length();
             //the spech to text speack 17 syllable per seconds
             time_sensitivity=(long)Math.abs((length/17)*MIN_TIME_SENSIVILITI);
-            Log.d("Set Time sensitivity","--Time---=length: "+length+"* 100000000/12--------- = "+time_sensitivity+" ms------------");
+            Log.d("Set Time sensitivity", "--Time---=length: " + length + "* 100000000/12--------- = " + time_sensitivity + " ms------------");
         }
 
         public void setLast_movement(long last_movement) {
@@ -851,7 +873,7 @@ private boolean isBlackDevice(String Adrees){
                     response = true;
 
                 }   }
-                Log.d("ACCELEROMETER", "-----RANGE OF TIMER----For--" +address +" id "+response+" --( time differ > time_sensitivity )-->( " + time_difference + " < " + time_sensitivity+" ),  and ( mMovement < min_movement )-->( "+mMovement+" < "+min_movement+" )" );
+            Log.d("ACCELEROMETER", "-----RANGE OF TIMER----For--" +address +" id "+response+" --( time differ > time_sensitivity )-->( " + time_difference + " < " + time_sensitivity+" ),  and ( mMovement < min_movement )-->( "+mMovement+" < "+min_movement+" )" );
 
 
             return response;
@@ -884,18 +906,18 @@ private boolean isBlackDevice(String Adrees){
 //        }
         private void push(float value, float[] r) {
             try{
-            if(a>0){
-            for (int i = (r.length - 1); i > 0; i--) {
-                float aux = r[i - 1];
-                r[i] = aux;
-            }}
-            a++;
-            r[0] = value;
+                if(a>0){
+                    for (int i = (r.length - 1); i > 0; i--) {
+                        float aux = r[i - 1];
+                        r[i] = aux;
+                    }}
+                a++;
+                r[0] = value;
 
-        }catch(NullPointerException e){
-            Log.e("ACCELEROMETER PUSH", "NULL POINT EXCEPTION"+e.getLocalizedMessage());
-            e.printStackTrace();
-        }
+            }catch(NullPointerException e){
+                Log.e("ACCELEROMETER PUSH", "NULL POINT EXCEPTION"+e.getLocalizedMessage());
+                e.printStackTrace();
+            }
         }
 
         private float average(float[] r) {
@@ -905,10 +927,10 @@ private boolean isBlackDevice(String Adrees){
             for (int i = 0; i< r.length; i++) {
                 sum = sum + r[i];
                 if(r[i]!=0.0f){
-                d++;}
+                    d++;}
             }
             if(d!=0.0f){
-            result = sum/d;}
+                result = sum/d;}
             //Log.d("Average", "SUM= "+sum+"/ por d= "+d+" result= "+result);
             return result;
         }

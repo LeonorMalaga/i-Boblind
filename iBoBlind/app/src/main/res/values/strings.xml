@@ -74,6 +74,10 @@
     <string name="by">" por : "</string>
     <string name="and_the_coberage_reguion">" y la potencia a partir de la cual se reproducira el texto asociado que antes era : "</string>
     <!-- activity-and-service-for-user -->
+    <string name="iniciado">Detectando balizas </string>
+    <string name="speakStop">Deteción de balizas detenida. Para iniciar, pulse de nuevo . </string>
+    <string name="salirParado">Saliendo con servicio detenido, para arancar de nuevo el servicio, a de entrar en la aplicación y pulsar en la parte inferior de la pantalla</string>
+    <string name="salir">Se ciera la ventana de la aplicación, pero el servicio de deteción de valizas sigue activo, para detenerlo entrar de nuevo en la aplicación y punsar en la parte inferior de la pantalla</string>
     <string name="stop">DETENER</string>
     <string name="user_first_textView">Presione el boton para iniciar la deteccion de I_beacons.</string>
     <string name="user_first_text">Presione el boton para detener el servicio de deteción de I_beacons</string>
